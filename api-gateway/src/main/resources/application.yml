@@ -34,7 +34,7 @@ management:
   endpoints:
     web:
       exposure:
-        include: gateway
+        include: ["gateway", "health"]
 
 logging:
   level:

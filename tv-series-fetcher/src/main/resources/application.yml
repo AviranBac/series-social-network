@@ -1,2 +1,6 @@
 server:
   port: 8081
+
+apiRequest:
+  websiteUrl: https://api.themoviedb.org/3/
+  apiKey: ${TMDB_API_KEY}
