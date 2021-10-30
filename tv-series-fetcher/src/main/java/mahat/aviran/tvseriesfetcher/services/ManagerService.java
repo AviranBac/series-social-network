@@ -21,7 +21,5 @@ public class ManagerService {
     public void fetchAll() {
         List<Genre> genres = this.genreFetcherService.requestGenres();
         List<TvSeries> popularSeries = this.tvSeriesFetcherService.requestPopularSeries();
-
-
     }
 }
