@@ -1,13 +1,15 @@
-package mahat.aviran.tvseriesfetcher.entities.persistance;
+package mahat.aviran.common.entities.persistence;
 
 import lombok.*;
+import lombok.experimental.Accessors;
 
 import javax.persistence.*;
 import java.util.Set;
 
 @Entity
 @Table(name = "tv_seasons")
-@Getter @Setter @ToString @EqualsAndHashCode @AllArgsConstructor @NoArgsConstructor
+@Accessors(chain = true)
+@Getter @Setter @ToString @EqualsAndHashCode(exclude = "tvSeries") @AllArgsConstructor @NoArgsConstructor
 public class PersistentTvSeason {
 
     @Id

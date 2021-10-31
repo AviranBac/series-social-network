@@ -3,11 +3,13 @@ package mahat.aviran.tvseriesfetcher.services;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
-import mahat.aviran.tvseriesfetcher.entities.persistance.PersistentGenre;
-import mahat.aviran.tvseriesfetcher.entities.persistance.PersistentTvSeries;
-import mahat.aviran.tvseriesfetcher.repositories.GenreRepository;
+import mahat.aviran.common.entities.persistence.PersistentGenre;
+import mahat.aviran.common.entities.persistence.PersistentTvSeries;
+import mahat.aviran.common.repositories.GenreRepository;
+import mahat.aviran.common.repositories.TvSeriesRepository;
 import org.springframework.stereotype.Service;
 import rx.Observer;
+import rx.schedulers.Schedulers;
 import rx.subjects.PublishSubject;
 
 import javax.annotation.PostConstruct;
@@ -21,11 +23,16 @@ public class EntitySaverService {
     private final PublishSubject<List<PersistentGenre>> genreSource = PublishSubject.create();
     private final PublishSubject<PersistentTvSeries> seriesSource = PublishSubject.create();
     private final GenreRepository genreRepository;
+    private final TvSeriesRepository tvSeriesRepository;
 
     @PostConstruct
     public void postConstruct() {
-        genreSource.subscribe(getGenreObserver());
-        seriesSource.subscribe(getSeriesObserver());
+        genreSource
+                .observeOn(Schedulers.newThread())
+                .subscribe(getGenreObserver());
+        seriesSource
+                .observeOn(Schedulers.newThread())
+                .subscribe(getSeriesObserver());
     }
 
     private Observer<List<PersistentGenre>> getGenreObserver() {
@@ -54,7 +61,8 @@ public class EntitySaverService {
 
             @Override
             public void onNext(PersistentTvSeries tvSeries) {
-                log.info("onNext");
+                tvSeriesRepository.save(tvSeries);
+                log.info("Saved series to DB - id: " + tvSeries.getId() + ", name: " + tvSeries.getName());
             }
         };
     }

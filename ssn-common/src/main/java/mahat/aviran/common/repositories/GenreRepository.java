@@ -1,6 +1,6 @@
-package mahat.aviran.tvseriesfetcher.repositories;
+package mahat.aviran.common.repositories;
 
-import mahat.aviran.tvseriesfetcher.entities.persistance.PersistentGenre;
+import mahat.aviran.common.entities.persistence.PersistentGenre;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 

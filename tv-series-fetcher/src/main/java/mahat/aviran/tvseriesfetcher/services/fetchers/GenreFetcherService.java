@@ -6,12 +6,9 @@ import mahat.aviran.tvseriesfetcher.entities.raw_request_entities.GenreResponse;
 import mahat.aviran.tvseriesfetcher.services.MapperService;
 import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.http.HttpMethod;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
-import org.springframework.web.client.HttpClientErrorException;
 import org.springframework.web.client.RestTemplate;
-import org.springframework.web.server.ResponseStatusException;
 import org.springframework.web.util.UriComponentsBuilder;
 
 import java.net.URI;
@@ -29,7 +26,7 @@ public class GenreFetcherService extends FetcherService {
         this.mapperService = mapperService;
     }
 
-    public List<Genre> requestGenres() {
+    public void requestGenres() {
         log.info("Requesting all genres from TMDB");
         ResponseEntity<GenreResponse> response = this.executeRequest();
 
@@ -37,7 +34,6 @@ public class GenreFetcherService extends FetcherService {
         log.info("Got " + genres.size() + " genres from TMDB: " + genres);
 
         this.mapperService.getGenreSource().onNext(genres);
-        return genres;
     }
 
     private ResponseEntity<GenreResponse> executeRequest() {

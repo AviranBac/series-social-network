@@ -3,12 +3,14 @@ package mahat.aviran.tvseriesfetcher.services;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
-import mahat.aviran.tvseriesfetcher.entities.mappers.GenreMapper;
-import mahat.aviran.tvseriesfetcher.entities.persistance.PersistentGenre;
+import mahat.aviran.common.entities.persistence.PersistentGenre;
+import mahat.aviran.tvseriesfetcher.entities.persistence_mappers.GenreMapper;
+import mahat.aviran.tvseriesfetcher.entities.persistence_mappers.TvSeriesMapper;
 import mahat.aviran.tvseriesfetcher.entities.raw_request_entities.Genre;
 import mahat.aviran.tvseriesfetcher.entities.raw_request_entities.TvSeriesFullEntity;
 import org.springframework.stereotype.Service;
 import rx.Observer;
+import rx.schedulers.Schedulers;
 import rx.subjects.PublishSubject;
 
 import javax.annotation.PostConstruct;
@@ -22,13 +24,18 @@ public class MapperService {
 
     private final PublishSubject<List<Genre>> genreSource = PublishSubject.create();
     private final PublishSubject<TvSeriesFullEntity> seriesSource = PublishSubject.create();
-    private final GenreMapper genreMapper;
     private final EntitySaverService entitySaverService;
+    private final GenreMapper genreMapper;
+    private final TvSeriesMapper tvSeriesMapper;
 
     @PostConstruct
     public void postConstruct() {
-        genreSource.subscribe(getGenreObserver());
-        seriesSource.subscribe(getSeriesObserver());
+        genreSource
+                .observeOn(Schedulers.newThread())
+                .subscribe(getGenreObserver());
+        seriesSource
+                .observeOn(Schedulers.newThread())
+                .subscribe(getSeriesObserver());
     }
 
     private Observer<List<Genre>> getGenreObserver() {
@@ -59,7 +66,7 @@ public class MapperService {
 
             @Override
             public void onNext(TvSeriesFullEntity tvSeriesFullEntity) {
-                log.info("onNext");
+                entitySaverService.getSeriesSource().onNext(tvSeriesMapper.toPersistent(tvSeriesFullEntity));
             }
         };
     }

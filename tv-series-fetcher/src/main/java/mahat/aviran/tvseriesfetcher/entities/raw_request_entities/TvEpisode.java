@@ -4,8 +4,6 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.*;
 
-import java.util.List;
-
 @Getter @Setter @ToString @EqualsAndHashCode @AllArgsConstructor @NoArgsConstructor
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class TvEpisode {
@@ -24,7 +22,7 @@ public class TvEpisode {
     @JsonProperty(value = "vote_average")
     private Double voteAverage;
     @JsonProperty(value = "vote_count")
-    private Double voteCount;
+    private Integer voteCount;
 
     public String getStillPath() {
         return this.stillPath == null ?

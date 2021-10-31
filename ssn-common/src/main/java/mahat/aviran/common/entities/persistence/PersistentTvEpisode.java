@@ -1,13 +1,14 @@
-package mahat.aviran.tvseriesfetcher.entities.persistance;
+package mahat.aviran.common.entities.persistence;
 
-import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.*;
+import lombok.experimental.Accessors;
 
 import javax.persistence.*;
 
 @Entity
 @Table(name = "tv_episodes")
-@Getter @Setter @ToString @EqualsAndHashCode @AllArgsConstructor @NoArgsConstructor
+@Accessors(chain = true)
+@Getter @Setter @ToString @EqualsAndHashCode(exclude = "season") @AllArgsConstructor @NoArgsConstructor
 public class PersistentTvEpisode {
 
     @Id
@@ -18,7 +19,6 @@ public class PersistentTvEpisode {
     @Column(columnDefinition = "text")
     private String overview;
     private String stillPath;
-    @Column(precision = 1)
     private double voteAverage;
     private int voteCount;
 

@@ -19,7 +19,7 @@ import java.util.stream.Stream;
 @Log4j2
 public class TvSeasonFetcherService extends FetcherService {
 
-    public TvSeasonFetcherService(final RestTemplate restTemplate) {
+    public TvSeasonFetcherService(RestTemplate restTemplate) {
         super(restTemplate);
     }
 
@@ -38,8 +38,13 @@ public class TvSeasonFetcherService extends FetcherService {
             log.info("Got season number " + seasonNumber + " for " + tvSeries.getName() + " (id: " + tvSeries.getId() + ")");
             return Stream.of(response.getBody());
         } catch (HttpClientErrorException e) {
-            log.error("Error occurred while trying to query season number " + seasonNumber + " for " + tvSeries.getName() +
-                    " (id: " + tvSeries.getId() + ")", e);
+            if (e instanceof HttpClientErrorException.NotFound) {
+                log.error("Season number " + seasonNumber + " for " + tvSeries.getName() + " (id: " + tvSeries.getId() + ") not found (404)");
+            } else {
+                log.error("Error occurred while trying to query season number " + seasonNumber + " for " + tvSeries.getName() +
+                          " (id: " + tvSeries.getId() + ")", e);
+            }
+
             return Stream.empty();
         }
     }

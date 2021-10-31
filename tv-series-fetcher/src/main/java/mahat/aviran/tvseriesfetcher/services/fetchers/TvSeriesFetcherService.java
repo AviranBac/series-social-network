@@ -1,11 +1,10 @@
 package mahat.aviran.tvseriesfetcher.services.fetchers;
 
 import lombok.extern.log4j.Log4j2;
-import mahat.aviran.tvseriesfetcher.entities.raw_request_entities.PopularSeriesMinimalIdentifier;
 import mahat.aviran.tvseriesfetcher.entities.raw_request_entities.PageResult;
+import mahat.aviran.tvseriesfetcher.entities.raw_request_entities.PopularSeriesMinimalIdentifier;
 import mahat.aviran.tvseriesfetcher.entities.raw_request_entities.TvSeries;
 import mahat.aviran.tvseriesfetcher.entities.raw_request_entities.TvSeriesFullEntity;
-import mahat.aviran.tvseriesfetcher.services.EntitySaverService;
 import mahat.aviran.tvseriesfetcher.services.MapperService;
 import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.http.HttpMethod;
@@ -16,7 +15,9 @@ import org.springframework.web.client.RestTemplate;
 import org.springframework.web.util.UriComponentsBuilder;
 
 import java.net.URI;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
@@ -27,7 +28,7 @@ public class TvSeriesFetcherService extends FetcherService {
     private final TvSeasonFetcherService tvSeasonFetcherService;
     private final MapperService mapperService;
     private final Set<String> TV_SERIES_WANTED_LANGUAGES = Set.of("en", "he");
-    private final int SERIES_LIMIT = 30;
+    private final int SERIES_LIMIT = 100;
 
     private int totalPages = 50;
 
@@ -39,7 +40,7 @@ public class TvSeriesFetcherService extends FetcherService {
         this.mapperService = mapperService;
     }
 
-    public List<TvSeriesFullEntity> requestPopularSeries() {
+    public void requestPopularSeries() {
         int page = 1;
         List<TvSeriesFullEntity> tvSeriesList = new ArrayList<>();
 
@@ -57,7 +58,6 @@ public class TvSeriesFetcherService extends FetcherService {
         }
 
         log.info("All series size: " + tvSeriesList.size());
-        return tvSeriesList;
     }
 
     private ResponseEntity<PageResult<PopularSeriesMinimalIdentifier>> executePopularSeriesRequest(int page) {

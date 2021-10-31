@@ -1,4 +1,4 @@
-package mahat.aviran.tvseriesfetcher.entities;
+package mahat.aviran.common.entities;
 
 import com.fasterxml.jackson.annotation.JsonCreator;
 import lombok.RequiredArgsConstructor;

@@ -1,7 +1,8 @@
-package mahat.aviran.tvseriesfetcher.entities.persistance;
+package mahat.aviran.common.entities.persistence;
 
 import lombok.*;
-import mahat.aviran.tvseriesfetcher.entities.SeriesStatus;
+import lombok.experimental.Accessors;
+import mahat.aviran.common.entities.SeriesStatus;
 
 import javax.persistence.*;
 import java.util.HashSet;
@@ -9,6 +10,7 @@ import java.util.Set;
 
 @Entity
 @Table(name = "tv_series")
+@Accessors(chain = true)
 @Getter @Setter @ToString @EqualsAndHashCode @AllArgsConstructor @NoArgsConstructor
 public class PersistentTvSeries {
 
@@ -20,8 +22,8 @@ public class PersistentTvSeries {
     @Column(columnDefinition = "text")
     private String overview;
     private String posterPath;
-    private Double popularity;
-    private Double voteAverage;
+    private double popularity;
+    private double voteAverage;
     private int voteCount;
     private int numberOfEpisodes;
     private int numberOfSeasons;

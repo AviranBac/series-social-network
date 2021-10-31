@@ -1,6 +1,5 @@
-package mahat.aviran.tvseriesfetcher.entities.persistance;
+package mahat.aviran.common.entities.persistence;
 
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import lombok.*;
 
 import javax.persistence.Entity;

@@ -3,7 +3,7 @@ package mahat.aviran.tvseriesfetcher.entities.raw_request_entities;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.*;
-import mahat.aviran.tvseriesfetcher.entities.SeriesStatus;
+import mahat.aviran.common.entities.SeriesStatus;
 
 import java.util.List;
 

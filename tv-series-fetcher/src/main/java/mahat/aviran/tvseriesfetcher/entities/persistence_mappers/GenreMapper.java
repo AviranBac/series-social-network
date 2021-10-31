@@ -1,7 +1,7 @@
-package mahat.aviran.tvseriesfetcher.entities.mappers;
+package mahat.aviran.tvseriesfetcher.entities.persistence_mappers;
 
+import mahat.aviran.common.entities.persistence.PersistentGenre;
 import mahat.aviran.tvseriesfetcher.entities.raw_request_entities.Genre;
-import mahat.aviran.tvseriesfetcher.entities.persistance.PersistentGenre;
 import org.springframework.stereotype.Component;
 
 @Component
