@@ -1,16 +1,18 @@
 package mahat.aviran.tvseriesfetcher.services.fetchers;
 
 import lombok.extern.log4j.Log4j2;
-import mahat.aviran.tvseriesfetcher.entities.PopularSeriesMinimalIdentifier;
-import mahat.aviran.tvseriesfetcher.entities.PageResult;
-import mahat.aviran.tvseriesfetcher.entities.TvSeries;
+import mahat.aviran.tvseriesfetcher.entities.raw_request_entities.PopularSeriesMinimalIdentifier;
+import mahat.aviran.tvseriesfetcher.entities.raw_request_entities.PageResult;
+import mahat.aviran.tvseriesfetcher.entities.raw_request_entities.TvSeries;
+import mahat.aviran.tvseriesfetcher.entities.raw_request_entities.TvSeriesFullEntity;
+import mahat.aviran.tvseriesfetcher.services.EntitySaverService;
+import mahat.aviran.tvseriesfetcher.services.MapperService;
 import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.http.HttpMethod;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
+import org.springframework.web.client.HttpClientErrorException;
 import org.springframework.web.client.RestTemplate;
-import org.springframework.web.server.ResponseStatusException;
 import org.springframework.web.util.UriComponentsBuilder;
 
 import java.net.URI;
@@ -22,44 +24,36 @@ import java.util.stream.Stream;
 @Log4j2
 public class TvSeriesFetcherService extends FetcherService {
 
+    private final TvSeasonFetcherService tvSeasonFetcherService;
+    private final MapperService mapperService;
     private final Set<String> TV_SERIES_WANTED_LANGUAGES = Set.of("en", "he");
-    private final int SERIES_LIMIT = 100;
+    private final int SERIES_LIMIT = 30;
 
     private int totalPages = 50;
 
-    public TvSeriesFetcherService(RestTemplate restTemplate) {
+    public TvSeriesFetcherService(RestTemplate restTemplate,
+                                  TvSeasonFetcherService tvSeasonFetcherService,
+                                  MapperService mapperService) {
         super(restTemplate);
+        this.tvSeasonFetcherService = tvSeasonFetcherService;
+        this.mapperService = mapperService;
     }
 
-    public List<TvSeries> requestPopularSeries() {
+    public List<TvSeriesFullEntity> requestPopularSeries() {
         int page = 1;
-        List<TvSeries> tvSeriesList = new ArrayList<>();
+        List<TvSeriesFullEntity> tvSeriesList = new ArrayList<>();
 
         while (tvSeriesList.size() < SERIES_LIMIT && page < totalPages) {
             log.info("Querying page number " + page + " for popular series");
             ResponseEntity<PageResult<PopularSeriesMinimalIdentifier>> response = this.executePopularSeriesRequest(page);
 
-            if (response.getStatusCode() != HttpStatus.OK) {
-                log.error("Error occurred while trying to query popular series. Status code: " + response.getStatusCode() + ", response: " + response.getBody());
-                throw new ResponseStatusException(response.getStatusCode());
-            } else {
-                totalPages = response.getBody().getTotalPages();
+            totalPages = response.getBody().getTotalPages();
 
-                List<PopularSeriesMinimalIdentifier> filteredSeriesIds = this.filterByLanguage(response.getBody().getResults());
-                log.info("Found " + filteredSeriesIds.size() + " series matching the language filter: " + TV_SERIES_WANTED_LANGUAGES);
+            List<PopularSeriesMinimalIdentifier> filteredSeriesIds = this.filterByLanguage(response.getBody().getResults());
+            log.info("Found " + filteredSeriesIds.size() + " series matching the language filter");
 
-                List<TvSeries> fetchedSeries = filteredSeriesIds.stream()
-                        .map(PopularSeriesMinimalIdentifier::getId)
-                        .flatMap(id -> {
-                            ResponseEntity<TvSeries> seriesResponse = this.executeTvSeriesRequest(id);
-                            return response.getStatusCode() != HttpStatus.OK ? Stream.empty() : Stream.of(seriesResponse.getBody());
-                        })
-                        .collect(Collectors.toList());
-                log.info("Fetched " + fetchedSeries.size() + " series");
-
-                tvSeriesList = appendNewTvSeries(fetchedSeries, tvSeriesList);
-                page++;
-            }
+            tvSeriesList = appendNewTvSeries(filteredSeriesIds, tvSeriesList);
+            page++;
         }
 
         log.info("All series size: " + tvSeriesList.size());
@@ -91,21 +85,39 @@ public class TvSeriesFetcherService extends FetcherService {
     }
 
     private List<PopularSeriesMinimalIdentifier> filterByLanguage(List<PopularSeriesMinimalIdentifier> seriesIdentifier) {
-        System.out.println(seriesIdentifier);
         return seriesIdentifier.stream()
                 .filter(tvSeries -> TV_SERIES_WANTED_LANGUAGES.contains(tvSeries.getOriginalLanguage()))
                 .collect(Collectors.toList());
     }
 
-    private List<TvSeries> appendNewTvSeries(List<TvSeries> foundTvSeries, List<TvSeries> accumulatedTvSeries) {
-        int appendedAmount = Math.min(foundTvSeries.size(), SERIES_LIMIT - accumulatedTvSeries.size());
-        List<TvSeries> appendedSeries = foundTvSeries.stream()
-            .limit(appendedAmount)
-            .collect(Collectors.toList());
+    private List<TvSeriesFullEntity> appendNewTvSeries(List<PopularSeriesMinimalIdentifier> newSeriesIds,
+                                                       List<TvSeriesFullEntity> accumulatedTvSeries) {
+        List<TvSeriesFullEntity> appendedSeries = this.fetchSeriesFullEntity(newSeriesIds, accumulatedTvSeries);
         accumulatedTvSeries.addAll(appendedSeries);
 
         log.info("Appended " + appendedSeries.size() + ". Accumulated list size: " + accumulatedTvSeries.size());
-        log.info("New Series appended: " + appendedSeries);
         return accumulatedTvSeries;
+    }
+
+    private List<TvSeriesFullEntity> fetchSeriesFullEntity(List<PopularSeriesMinimalIdentifier> seriesIds,
+                                                           List<TvSeriesFullEntity> accumulatedSeries) {
+        int limit = Math.min(seriesIds.size(), SERIES_LIMIT - accumulatedSeries.size());
+
+        return seriesIds.stream()
+                .map(PopularSeriesMinimalIdentifier::getId)
+                .flatMap(id -> {
+                    try {
+                        ResponseEntity<TvSeries> seriesResponse = this.executeTvSeriesRequest(id);
+                        return Stream.of(seriesResponse.getBody());
+                    } catch (HttpClientErrorException e) {
+                        log.error("Could not request tv series id: " + id);
+                        return Stream.empty();
+                    }
+                })
+                .limit(limit)
+                .map(TvSeriesFullEntity::new)
+                .peek(tvSeries -> tvSeries.setSeasons(tvSeasonFetcherService.requestSeasons(tvSeries)))
+                .peek(tvSeries -> mapperService.getSeriesSource().onNext(tvSeries))
+                .collect(Collectors.toList());
     }
 }

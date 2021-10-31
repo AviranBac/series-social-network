@@ -1,8 +1,9 @@
-package mahat.aviran.tvseriesfetcher.entities;
+package mahat.aviran.tvseriesfetcher.entities.raw_request_entities;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.*;
+import mahat.aviran.tvseriesfetcher.entities.SeriesStatus;
 
 import java.util.List;
 
@@ -32,6 +33,8 @@ public class TvSeries {
     private SeriesStatus status;
 
     public String getPosterPath() {
-        return String.join("", "https://image.tmdb.org/t/p/w185", this.posterPath);
+        return this.posterPath == null ?
+                null :
+                String.join("", "https://image.tmdb.org/t/p/w185", this.posterPath);
     }
 }

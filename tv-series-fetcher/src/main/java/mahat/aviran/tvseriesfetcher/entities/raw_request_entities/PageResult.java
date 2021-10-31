@@ -1,4 +1,4 @@
-package mahat.aviran.tvseriesfetcher.entities;
+package mahat.aviran.tvseriesfetcher.entities.raw_request_entities;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;

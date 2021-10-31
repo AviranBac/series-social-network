@@ -6,7 +6,6 @@ import lombok.RequiredArgsConstructor;
 import java.util.Arrays;
 
 @RequiredArgsConstructor
-//@JsonDeserialize(using = SeriesStatusDeserializer.class)
 public enum SeriesStatus {
     CANCELED("Canceled", "בוטלה"),
     ENDED("Ended", "נגמרה"),
