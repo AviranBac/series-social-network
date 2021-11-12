@@ -7,6 +7,7 @@ import mahat.aviran.common.entities.persistence.PersistentGenre;
 import mahat.aviran.common.entities.persistence.PersistentTvSeries;
 import mahat.aviran.common.repositories.GenreRepository;
 import mahat.aviran.common.repositories.TvSeriesRepository;
+import mahat.aviran.common.repositories.UserRepository;
 import org.springframework.stereotype.Service;
 import rx.Observer;
 import rx.schedulers.Schedulers;
