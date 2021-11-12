@@ -16,7 +16,7 @@ spring:
     hikari:
       minimum-idle: 5
       maximum-pool-size: 10
-      pool-name: HikariCP-Aviran
+      pool-name: HikariCP-Aviran-Tv-Series-Fetcher
 
 server:
   port: 8081

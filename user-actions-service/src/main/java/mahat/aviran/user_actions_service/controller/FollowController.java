@@ -2,14 +2,12 @@ package mahat.aviran.user_actions_service.controller;
 
 import lombok.RequiredArgsConstructor;
 import mahat.aviran.user_actions_service.entities.FollowDetails;
-import mahat.aviran.user_actions_service.entities.UserRegistrationDetails;
 import mahat.aviran.user_actions_service.services.FollowService;
 import mahat.aviran.user_actions_service.utils.exceptions.UsernameFromNotFoundException;
 import mahat.aviran.user_actions_service.utils.exceptions.UsernameToNotFoundException;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
-import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;

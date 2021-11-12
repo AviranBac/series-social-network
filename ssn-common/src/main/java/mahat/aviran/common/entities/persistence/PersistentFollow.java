@@ -1,6 +1,5 @@
 package mahat.aviran.common.entities.persistence;
 
-import com.fasterxml.jackson.annotation.JsonManagedReference;
 import lombok.*;
 import lombok.experimental.Accessors;
 

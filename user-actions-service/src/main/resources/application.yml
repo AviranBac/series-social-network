@@ -16,7 +16,7 @@ spring:
     hikari:
       minimum-idle: 5
       maximum-pool-size: 10
-      pool-name: HikariCP-Aviran
+      pool-name: HikariCP-Aviran-User-Actions-Service
 
 server:
   port: 8082

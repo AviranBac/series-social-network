@@ -1,8 +1,7 @@
 package mahat.aviran.user_actions_service.controller;
 
-import lombok.*;
+import lombok.RequiredArgsConstructor;
 import mahat.aviran.common.entities.dtos.UserDto;
-import mahat.aviran.common.entities.persistence.PersistentUser;
 import mahat.aviran.user_actions_service.entities.UserCredentials;
 import mahat.aviran.user_actions_service.entities.UserRegistrationDetails;
 import mahat.aviran.user_actions_service.services.UserService;
