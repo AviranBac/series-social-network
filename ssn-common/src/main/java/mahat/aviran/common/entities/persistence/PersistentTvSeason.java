@@ -9,7 +9,7 @@ import java.util.Set;
 @Entity
 @Table(name = "tv_seasons")
 @Accessors(chain = true)
-@Getter @Setter @ToString @EqualsAndHashCode(exclude = "tvSeries") @AllArgsConstructor @NoArgsConstructor
+@Getter @Setter @ToString(exclude = "tvSeries") @EqualsAndHashCode(exclude = "tvSeries") @AllArgsConstructor @NoArgsConstructor
 public class PersistentTvSeason {
 
     @Id

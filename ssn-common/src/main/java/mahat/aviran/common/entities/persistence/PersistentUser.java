@@ -3,10 +3,9 @@ package mahat.aviran.common.entities.persistence;
 import lombok.*;
 import lombok.experimental.Accessors;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.Id;
-import javax.persistence.Table;
+import javax.persistence.*;
+import java.util.HashSet;
+import java.util.Set;
 
 @Entity
 @Table(name = "users")
@@ -23,4 +22,12 @@ public class PersistentUser {
     private String firstName;
     @Column(nullable = false)
     private String lastName;
+
+    @ManyToMany
+    @JoinTable(name = "watchlist_records",
+            joinColumns = @JoinColumn(name = "user_name"),
+            inverseJoinColumns = @JoinColumn(name = "episode_id"),
+            foreignKey = @ForeignKey(name ="fk_user_name"),
+            inverseForeignKey = @ForeignKey(name = "fk_episode_id"))
+    private Set<PersistentTvEpisode> watchlistRecords = new HashSet<>();
 }

@@ -8,7 +8,7 @@ import javax.persistence.*;
 @Entity
 @Table(name = "tv_episodes")
 @Accessors(chain = true)
-@Getter @Setter @ToString @EqualsAndHashCode(exclude = "season") @AllArgsConstructor @NoArgsConstructor
+@Getter @Setter @ToString(exclude = "season") @EqualsAndHashCode(exclude = "season") @AllArgsConstructor @NoArgsConstructor
 public class PersistentTvEpisode {
 
     @Id

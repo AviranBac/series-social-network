@@ -1,4 +1,4 @@
-package mahat.aviran.common.entities.dtos;
+package mahat.aviran.user_actions_service.dtos;
 
 import lombok.*;
 import lombok.experimental.Accessors;
