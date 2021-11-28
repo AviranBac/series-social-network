@@ -28,8 +28,8 @@ public class ApiGatewayApplication {
 	@ResponseBody
 	public String clientPlaceholder(@AuthenticationPrincipal OidcUser oidcUser,
 									@RegisteredOAuth2AuthorizedClient("okta") OAuth2AuthorizedClient client) {
-		System.out.println(oidcUser);
-		System.out.println(client.getAccessToken().getTokenValue());
-		return "Placeholder for client";
+		return "Placeholder for client.<br>" +
+			   "Current user: " + oidcUser.getPreferredUsername() + "<br>" +
+			   "Access token for easier use: " + client.getAccessToken().getTokenValue();
 	}
 }
