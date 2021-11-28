@@ -14,8 +14,8 @@ public class RateLimiterConfig {
     @Bean
     public KeyResolver userKeyResolver() {
         return exchange -> {
-            String user = exchange.getRequest().getHeaders().getFirst("user");
-            String actual = Strings.isEmpty(user) ? UUID.randomUUID().toString() : user;
+            String authorization = exchange.getRequest().getHeaders().getFirst("Authorization");
+            String actual = Strings.isEmpty(authorization) ? UUID.randomUUID().toString() : authorization;
             System.out.println(actual);
             return Mono.just(actual);
         };

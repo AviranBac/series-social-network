@@ -32,20 +32,36 @@ spring:
     password: ${REDIS_PASSWORD}
   security:
     oauth2:
-      resourceserver:
-        jwt:
-          issuer-uri: https://dev-52403713.okta.com/oauth2/seriesSocialNetwork
       client:
         registration:
-          default:
-            provider: okta
-            client-id: ${OKTA_CLIENT_ID}
-            client-secret: ${OKTA_CLIENT_SECRET}
-            redirect-uri: http://localhost:8080/login/oauth2/code/okta
-            scope: [ "openid", "profile", "email" ]
-        provider:
           okta:
-            issuer-uri: https://dev-52403713.okta.com/oauth2/seriesSocialNetwork
+            redirect-uri: http://localhost:8080/login/oauth2/code/okta
+  jpa:
+    hibernate:
+      ddl-auto: update
+    database-platform: org.hibernate.dialect.PostgreSQLDialect
+    properties:
+      javax:
+        persistence:
+          create-database-schemas: true
+      hibernate:
+        default_schema: ${DB_SCHEMA_NAME}
+  datasource:
+    url: "jdbc:postgresql://localhost:5432/${DB_NAME}"
+    username: ${DB_USERNAME}
+    password: ${DB_PASSWORD}
+    hikari:
+      minimum-idle: 5
+      maximum-pool-size: 10
+      pool-name: HikariCP-Aviran-API-Gateway
+
+okta:
+  oauth2:
+    post-logout-redirect-uri: http://localhost:8080
+    client-id: ${OKTA_CLIENT_ID}
+    client-secret: ${OKTA_CLIENT_SECRET}
+    scopes: [ "openid", "profile", "email" ]
+    issuer: https://dev-52403713.okta.com/oauth2/seriesSocialNetwork
 
 management:
   endpoints:
@@ -55,5 +71,6 @@ management:
 
 logging:
   level:
-    reactor.netty: INFO
-    org.springframework.cloud.gateway: INFO
+#    reactor.netty: DEBUG
+#    org.springframework.cloud.gateway: DEBUG
+    org.springframework.security: TRACE

@@ -7,13 +7,8 @@ import mahat.aviran.common.entities.dtos.UserDto;
 import mahat.aviran.common.entities.persistence.PersistentUser;
 import mahat.aviran.common.repositories.FollowRepository;
 import mahat.aviran.common.repositories.UserRepository;
-import mahat.aviran.user_actions_service.entities.UserCredentials;
-import mahat.aviran.user_actions_service.entities.UserRegistrationDetails;
-import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
-import javax.persistence.EntityExistsException;
-import javax.transaction.Transactional;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
@@ -22,36 +17,11 @@ import java.util.stream.Collectors;
 @Log4j2
 public class UserService {
 
-    private final PasswordEncoder passwordEncoder;
     private final UserRepository userRepository;
     private final FollowRepository followRepository;
 
-    public boolean isUserAuthenticated(UserCredentials credentials) {
-        Optional<PersistentUser> optionalUser = this.findUserById(credentials.getUserName());
-
-        return optionalUser
-                .filter(persistentUser -> passwordEncoder.matches(credentials.getPassword(), persistentUser.getPassword()))
-                .isPresent();
-    }
-
     public Optional<UserDto> findUser(String userName) {
         return this.findUserById(userName).map(this::convertPersistentUserToDto);
-    }
-
-    @Transactional
-    public UserDto saveUser(UserRegistrationDetails userRegistrationDetails) throws EntityExistsException {
-        Optional<PersistentUser> optionalPersistentUser = this.findUserById(userRegistrationDetails.getUserName());
-        if (optionalPersistentUser.isPresent()) {
-            throw new EntityExistsException();
-        }
-
-        PersistentUser persistentUser = new PersistentUser()
-                .setUserName(userRegistrationDetails.getUserName())
-                .setFirstName(userRegistrationDetails.getFirstName())
-                .setLastName(userRegistrationDetails.getLastName())
-                .setPassword(passwordEncoder.encode(userRegistrationDetails.getPassword()));
-
-        return this.convertPersistentUserToDto(userRepository.save(persistentUser));
     }
 
     public Optional<PersistentUser> findUserById(String userName) {
