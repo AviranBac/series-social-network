@@ -1,4 +1,4 @@
-package mahat.aviran.apigateway.config;
+package mahat.aviran.apigateway.config.oauth2;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;

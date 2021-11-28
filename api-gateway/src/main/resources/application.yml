@@ -18,14 +18,15 @@ spring:
           uri: http://localhost:8082
           predicates:
             - Path=/users/**
-          filters:
-            - TokenRelay=
-            - name: RequestRateLimiter
-              args:
-                # These are configurations per second
-                redis-rate-limiter.replenishRate: 10
-                redis-rate-limiter.burstCapacity: 20
-                redis-rate-limiter.requestedTokens: 1
+      default-filters:
+        - TokenRelay=
+        - RemoveRequestHeader=Cookie
+        - name: RequestRateLimiter
+          args:
+            # These are configurations per second
+            redis-rate-limiter.replenishRate: 10
+            redis-rate-limiter.burstCapacity: 20
+            redis-rate-limiter.requestedTokens: 1
   redis:
     host: ${REDIS_HOST}
     port: ${REDIS_PORT}
@@ -71,6 +72,8 @@ management:
 
 logging:
   level:
+    root: INFO
+    org.springframework.web: TRACE
 #    reactor.netty: DEBUG
 #    org.springframework.cloud.gateway: DEBUG
-    org.springframework.security: TRACE
+#    org.springframework.security: TRACE

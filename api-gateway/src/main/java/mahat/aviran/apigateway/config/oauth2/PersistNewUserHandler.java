@@ -1,4 +1,4 @@
-package mahat.aviran.apigateway.config;
+package mahat.aviran.apigateway.config.oauth2;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
