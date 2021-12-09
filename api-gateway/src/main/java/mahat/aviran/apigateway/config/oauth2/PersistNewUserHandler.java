@@ -25,10 +25,8 @@ public class PersistNewUserHandler implements ServerAuthenticationSuccessHandler
     public Mono<Void> onAuthenticationSuccess(WebFilterExchange webFilterExchange, Authentication authentication) {
         OidcUser oidcUser = (OidcUser) authentication.getPrincipal();
         UserDto userDto = new UserDto(oidcUser.getPreferredUsername(),
-                oidcUser.getGivenName(),
-                oidcUser.getFamilyName(),
-                Collections.emptyList(),
-                Collections.emptyList());
+                                      oidcUser.getGivenName(),
+                                      oidcUser.getFamilyName());
         this.persistNewUserIfNeeded(userDto);
 
         return Mono.empty();

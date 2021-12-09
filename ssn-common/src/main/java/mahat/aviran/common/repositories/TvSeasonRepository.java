@@ -10,6 +10,6 @@ import java.util.Set;
 @Repository
 public interface TvSeasonRepository extends JpaRepository<PersistentTvSeason, String> {
 
-    @Query(value = "SELECT season_id FROM tv_seasons WHERE series_id=?1", nativeQuery = true)
+    @Query(value = "SELECT id FROM tv_seasons WHERE series_id=?1", nativeQuery = true)
     Set<String> getSeasonIdsBySeriesId(String seriesId);
 }

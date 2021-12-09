@@ -5,6 +5,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 import mahat.aviran.common.entities.persistence.PersistentFollow;
 import mahat.aviran.common.repositories.FollowRepository;
+import mahat.aviran.common.repositories.UserRepository;
 import mahat.aviran.user_actions_service.dtos.FollowDto;
 import mahat.aviran.user_actions_service.utils.exceptions.UsernameFromNotFoundException;
 import mahat.aviran.user_actions_service.utils.exceptions.UsernameToNotFoundException;
@@ -19,8 +20,8 @@ import javax.transaction.Transactional;
 @Log4j2
 public class FollowService {
 
-    private final UserService userService;
     private final FollowRepository followRepository;
+    private final UserRepository userRepository;
 
     @Transactional
     public FollowDto addFollow(String usernameFrom, String usernameTo) throws EntityNotFoundException, EntityExistsException {
@@ -33,8 +34,8 @@ public class FollowService {
         }
 
         follow = new PersistentFollow()
-                .setUsernameFrom(this.userService.findUserById(usernameFrom).get())
-                .setUsernameTo(this.userService.findUserById(usernameTo).get());
+                .setUsernameFrom(this.userRepository.findById(usernameFrom).get())
+                .setUsernameTo(this.userRepository.findById(usernameTo).get());
         return this.convertPersistentFollowToDto(this.followRepository.save(follow));
     }
 
@@ -53,11 +54,11 @@ public class FollowService {
     }
 
     private void validateUserInput(String usernameFrom, String usernameTo) {
-        if (this.userService.findUserById(usernameFrom).isEmpty()) {
+        if (this.userRepository.existsById(usernameFrom)) {
             throw new UsernameFromNotFoundException();
         }
 
-        if (this.userService.findUserById(usernameTo).isEmpty()) {
+        if (this.userRepository.existsById(usernameTo)) {
             throw new UsernameToNotFoundException();
         }
     }
