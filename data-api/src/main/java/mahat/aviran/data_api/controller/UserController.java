@@ -4,6 +4,7 @@ import lombok.RequiredArgsConstructor;
 import mahat.aviran.common.entities.dtos.UserDto;
 import mahat.aviran.data_api.dtos.PageDto;
 import mahat.aviran.data_api.services.UserService;
+import org.springframework.data.domain.Sort;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
@@ -20,9 +21,9 @@ public class UserController {
     @GetMapping()
     @ResponseBody
     public PageDto<UserDto> getUsersByFilter(@RequestParam int page,
-                                                 @RequestParam(required = false, defaultValue = "") String userName,
-                                                 @RequestParam(required = false, defaultValue = "") String firstName,
-                                                 @RequestParam(required = false, defaultValue = "") String lastName) {
+                                             @RequestParam(required = false, defaultValue = "") String userName,
+                                             @RequestParam(required = false, defaultValue = "") String firstName,
+                                             @RequestParam(required = false, defaultValue = "") String lastName) {
         return userService.getUsersByFilter(page, userName, firstName, lastName);
     }
 
@@ -51,5 +52,11 @@ public class UserController {
         return followers.
                 <ResponseEntity<Object>> map(ResponseEntity::ok)
                 .orElseGet(() -> ResponseEntity.badRequest().body("Username " + username + " does not exist"));
+    }
+
+    @GetMapping("followed")
+    @ResponseBody
+    public PageDto<UserDto> getFollowedUsers(@RequestParam int page, @RequestParam Sort.Direction sort) {
+        return this.userService.getFollowedUsers(page, sort);
     }
 }

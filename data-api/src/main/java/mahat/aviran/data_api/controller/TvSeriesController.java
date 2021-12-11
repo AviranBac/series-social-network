@@ -6,6 +6,7 @@ import mahat.aviran.data_api.dtos.PageDto;
 import mahat.aviran.data_api.dtos.TvSeriesDto;
 import mahat.aviran.data_api.dtos.TvSeriesExtendedDto;
 import mahat.aviran.data_api.services.TvSeriesService;
+import org.springframework.data.domain.Sort;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
@@ -38,10 +39,17 @@ public class TvSeriesController {
                 .orElseGet(() -> ResponseEntity.badRequest().body("Series id " + seriesId + " does not exist"));
     }
 
-    @GetMapping("/commonAmongFollowing/{username}")
+    @GetMapping("commonAmongFollowing/{username}")
     @ResponseBody
     public PageDto<TvSeriesDto> getCommonSeriesAmongFollowing(@PathVariable String username,
                                                               @RequestParam int page) {
         return tvSeriesService.getCommonSeriesAmongFollowing(page, username);
+    }
+
+    @GetMapping("watched")
+    @ResponseBody
+    public PageDto<TvSeriesDto> getWatchedSeries(@RequestParam int page,
+                                                 @RequestParam Sort.Direction sort) {
+        return tvSeriesService.getMostWatchedSeries(page, sort);
     }
 }

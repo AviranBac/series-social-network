@@ -10,6 +10,7 @@ import mahat.aviran.common.repositories.UserRepository;
 import mahat.aviran.data_api.dtos.PageDto;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 
@@ -67,6 +68,14 @@ public class UserService {
                 .map(FollowRepository.Following::getUsernameTo)
                 .map(this::convertUserToDto))
                 .map(PageDto::from);
+    }
+
+    public PageDto<UserDto> getFollowedUsers(int page, Sort.Direction direction) {
+        Page<UserDto> sortedFollowedUsers = this.userRepository.findFollowedUsers(
+                PageRequest.of(page, PAGE_SIZE, Sort.by(direction, "followed_users.count"))
+        ).map(this::convertUserToDto);
+
+        return PageDto.from(sortedFollowedUsers);
     }
 
     private UserDto convertUserToDto(PersistentUser persistentUser) {

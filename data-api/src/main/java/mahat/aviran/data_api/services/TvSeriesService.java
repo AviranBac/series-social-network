@@ -18,6 +18,7 @@ import mahat.aviran.data_api.dtos.TvSeriesDto;
 import mahat.aviran.data_api.dtos.TvSeriesExtendedDto;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 
@@ -67,10 +68,20 @@ public class TvSeriesService {
                 .map(PersistentUser::getUserName)
                 .collect(Collectors.toSet());
 
-        Page<TvSeriesDto> commonSeries = this.tvSeriesRepository.getCommonSeriesAmongUsers(followingUsernames, PageRequest.of(page, PAGE_SIZE))
-                .map(TvSeriesDto::from);
+        Page<TvSeriesDto> commonSeries = this.tvSeriesRepository.getCommonSeriesAmongUsers(
+                followingUsernames,
+                PageRequest.of(page, PAGE_SIZE, Sort.by(Sort.Direction.DESC, "common_series.count"))
+        ).map(TvSeriesDto::from);
 
         return PageDto.from(commonSeries);
+    }
+
+    public PageDto<TvSeriesDto> getMostWatchedSeries(int page, Sort.Direction direction) {
+        Page<TvSeriesDto> mostWatchedSeries = this.tvSeriesRepository.getWatchedSeries(
+                PageRequest.of(page, PAGE_SIZE, Sort.by(direction, "common_series.count"))
+        ).map(TvSeriesDto::from);
+
+        return PageDto.from(mostWatchedSeries);
     }
 
     private TvSeriesExtendedDto convertSeriesToExtendedDto(PersistentTvSeries persistentTvSeries) {
