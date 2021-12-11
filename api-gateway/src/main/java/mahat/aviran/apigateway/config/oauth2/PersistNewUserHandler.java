@@ -12,8 +12,6 @@ import org.springframework.security.web.server.authentication.ServerAuthenticati
 import org.springframework.stereotype.Component;
 import reactor.core.publisher.Mono;
 
-import java.util.Collections;
-
 @Component
 @RequiredArgsConstructor
 @Log4j2

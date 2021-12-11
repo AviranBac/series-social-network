@@ -3,23 +3,30 @@ package mahat.aviran.data_api.services;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
+import mahat.aviran.common.entities.SeriesStatus;
 import mahat.aviran.common.entities.dtos.TvEpisodeDto;
-import mahat.aviran.common.entities.persistence.PersistentGenre;
-import mahat.aviran.common.entities.persistence.PersistentTvEpisode;
 import mahat.aviran.common.entities.persistence.PersistentTvSeason;
 import mahat.aviran.common.entities.persistence.PersistentTvSeries;
-import mahat.aviran.common.repositories.GenreRepository;
+import mahat.aviran.common.entities.persistence.PersistentUser;
+import mahat.aviran.common.repositories.FollowRepository;
 import mahat.aviran.common.repositories.TvEpisodeRepository;
 import mahat.aviran.common.repositories.TvSeasonRepository;
 import mahat.aviran.common.repositories.TvSeriesRepository;
+import mahat.aviran.data_api.dtos.PageDto;
 import mahat.aviran.data_api.dtos.TvSeasonDto;
+import mahat.aviran.data_api.dtos.TvSeriesDto;
 import mahat.aviran.data_api.dtos.TvSeriesExtendedDto;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Optional;
 import java.util.Set;
 import java.util.stream.Collectors;
+
+import static mahat.aviran.common.repositories.TvSeriesRepository.*;
 
 @Service
 @Getter @RequiredArgsConstructor
@@ -29,63 +36,55 @@ public class TvSeriesService {
     private final TvSeriesRepository tvSeriesRepository;
     private final TvSeasonRepository tvSeasonRepository;
     private final TvEpisodeRepository tvEpisodeRepository;
-    private final GenreRepository genreRepository;
+    private final FollowRepository followRepository;
+    private final int PAGE_SIZE = 20;
+
+    public PageDto<TvSeriesDto> getSeriesByFilter(int page,
+                                                  String nameCriteria,
+                                                  Set<SeriesStatus> seriesStatusCriteria,
+                                                  Set<Integer> genreIdCriteria) {
+        Specification<PersistentTvSeries> specification = nameStartsWith(nameCriteria)
+                .and(seriesStatusIn(seriesStatusCriteria))
+                .and(genreIdIn(genreIdCriteria));
+
+        Page<TvSeriesDto> pageResult = this.tvSeriesRepository
+                .findAll(specification, PageRequest.of(page, PAGE_SIZE))
+                .map(TvSeriesDto::from);
+
+        return PageDto.from(pageResult);
+    }
 
     public Optional<TvSeriesExtendedDto> getSeriesDetailsById(String seriesId) {
         return this.tvSeriesRepository.findById(seriesId)
                 .map(this::convertSeriesToExtendedDto);
     }
 
+    public PageDto<TvSeriesDto> getCommonSeriesAmongFollowing(int page, String username) {
+        PersistentUser tempPersistentUser = new PersistentUser().setUserName(username);
+
+        Set<String> followingUsernames = this.followRepository.findAllByUsernameFrom(tempPersistentUser).stream()
+                .map(FollowRepository.Following::getUsernameTo)
+                .map(PersistentUser::getUserName)
+                .collect(Collectors.toSet());
+
+        Page<TvSeriesDto> commonSeries = this.tvSeriesRepository.getCommonSeriesAmongUsers(followingUsernames, PageRequest.of(page, PAGE_SIZE))
+                .map(TvSeriesDto::from);
+
+        return PageDto.from(commonSeries);
+    }
+
     private TvSeriesExtendedDto convertSeriesToExtendedDto(PersistentTvSeries persistentTvSeries) {
-        Set<String> seasonIds = tvSeasonRepository.getSeasonIdsBySeriesId(persistentTvSeries.getId());
-        Set<String> genreNames = persistentTvSeries.getGenres().stream().map(PersistentGenre::getName).collect(Collectors.toSet());
-        List<TvSeasonDto> tvSeasonDtos = tvSeasonRepository.findAllById(seasonIds).stream()
-                .map(this::convertSeasonToDto)
+        List<TvSeasonDto> tvSeasonDtos = tvSeasonRepository.getSeasonsBySeriesId(persistentTvSeries.getId()).stream()
+                .map(persistentSeason -> TvSeasonDto.from(persistentSeason, this.generateTvEpisodeDtos(persistentSeason)))
                 .collect(Collectors.toList());
 
-        return new TvSeriesExtendedDto()
-                .setId(persistentTvSeries.getId())
-                .setName(persistentTvSeries.getName())
-                .setFirstAirDate(persistentTvSeries.getFirstAirDate())
-                .setOriginalLanguage(persistentTvSeries.getOriginalLanguage())
-                .setOverview(persistentTvSeries.getOverview())
-                .setPosterPath(persistentTvSeries.getPosterPath())
-                .setPopularity(persistentTvSeries.getPopularity())
-                .setVoteAverage(persistentTvSeries.getVoteAverage())
-                .setVoteCount(persistentTvSeries.getVoteCount())
-                .setNumberOfEpisodes(persistentTvSeries.getNumberOfEpisodes())
-                .setNumberOfSeasons(persistentTvSeries.getNumberOfSeasons())
-                .setStatus(persistentTvSeries.getStatus())
-                .setGenres(genreNames)
+        return new TvSeriesExtendedDto(TvSeriesDto.from(persistentTvSeries))
                 .setSeasons(tvSeasonDtos);
     }
 
-    private TvSeasonDto convertSeasonToDto(PersistentTvSeason persistentTvSeason) {
-        Set<String> episodeIds = tvEpisodeRepository.getEpisodeIdsBySeasonId(persistentTvSeason.getId());
-        List<TvEpisodeDto> tvEpisodeDtos = tvEpisodeRepository.findAllById(episodeIds).stream()
-                .map(this::convertEpisodeToDto)
+    private List<TvEpisodeDto> generateTvEpisodeDtos(PersistentTvSeason persistentTvSeason) {
+        return tvEpisodeRepository.getEpisodesBySeasonId(persistentTvSeason.getId()).stream()
+                .map(TvEpisodeDto::from)
                 .collect(Collectors.toList());
-
-        return new TvSeasonDto()
-                .setId(persistentTvSeason.getId())
-                .setName(persistentTvSeason.getName())
-                .setSeasonNumber(persistentTvSeason.getSeasonNumber())
-                .setAirDate(persistentTvSeason.getAirDate())
-                .setOverview(persistentTvSeason.getOverview())
-                .setPosterPath(persistentTvSeason.getPosterPath())
-                .setEpisodes(tvEpisodeDtos);
-    }
-
-    private TvEpisodeDto convertEpisodeToDto(PersistentTvEpisode persistentTvEpisode) {
-        return new TvEpisodeDto()
-                .setId(persistentTvEpisode.getId())
-                .setName(persistentTvEpisode.getName())
-                .setEpisodeNumber(persistentTvEpisode.getEpisodeNumber())
-                .setSeasonNumber(persistentTvEpisode.getSeason().getSeasonNumber())
-                .setAirDate(persistentTvEpisode.getAirDate())
-                .setOverview(persistentTvEpisode.getOverview())
-                .setStillPath(persistentTvEpisode.getStillPath())
-                .setVoteAverage(persistentTvEpisode.getVoteAverage())
-                .setVoteCount(persistentTvEpisode.getVoteCount());
     }
 }

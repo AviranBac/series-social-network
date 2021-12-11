@@ -17,7 +17,6 @@ import org.springframework.stereotype.Service;
 
 import javax.persistence.EntityNotFoundException;
 import javax.transaction.Transactional;
-import java.util.HashSet;
 import java.util.InputMismatchException;
 import java.util.List;
 import java.util.Set;
@@ -43,7 +42,7 @@ public class WatchlistService {
         updatedUser.getWatchlistRecords().addAll(episodesToAdd);
         this.userRepository.save(updatedUser);
 
-        Set<TvEpisodeDto> episodeDtos = episodesToAdd.stream().map(this::convertEpisodeToDto).collect(Collectors.toSet());
+        Set<TvEpisodeDto> episodeDtos = episodesToAdd.stream().map(TvEpisodeDto::from).collect(Collectors.toSet());
         return new WatchlistRecordDto(username, episodeDtos);
     }
 
@@ -57,7 +56,7 @@ public class WatchlistService {
         updatedUser.getWatchlistRecords().removeAll(episodesToRemove);
         this.userRepository.save(updatedUser);
 
-        Set<TvEpisodeDto> episodeDtos = episodesToRemove.stream().map(this::convertEpisodeToDto).collect(Collectors.toSet());
+        Set<TvEpisodeDto> episodeDtos = episodesToRemove.stream().map(TvEpisodeDto::from).collect(Collectors.toSet());
         return new WatchlistRecordDto(username, episodeDtos);
     }
 
@@ -81,28 +80,11 @@ public class WatchlistService {
     }
 
     private List<PersistentTvEpisode> getTvEpisodesByEntity(WatchlistRecordDetails.EntityType entityType, String entityId) {
-        Set<String> episodeIdsToRemove = new HashSet<>();
-
         switch (entityType) {
-            case SERIES: episodeIdsToRemove = this.tvEpisodeRepository.getEpisodeIdsBySeriesId(entityId); break;
-            case SEASON: episodeIdsToRemove = this.tvEpisodeRepository.getEpisodeIdsBySeasonId(entityId); break;
-            case EPISODE: episodeIdsToRemove = Set.of(entityId); break;
-            default: break;
+            case SERIES:  return this.tvEpisodeRepository.getEpisodeIdsBySeriesId(entityId);
+            case SEASON:  return this.tvEpisodeRepository.getEpisodesBySeasonId(entityId);
+            case EPISODE: return this.tvEpisodeRepository.findAllById(Set.of(entityId));
+            default: return List.of();
         }
-
-        return this.tvEpisodeRepository.findAllById(episodeIdsToRemove);
-    }
-
-    private TvEpisodeDto convertEpisodeToDto(PersistentTvEpisode persistentTvEpisode) {
-        return new TvEpisodeDto()
-                .setId(persistentTvEpisode.getId())
-                .setName(persistentTvEpisode.getName())
-                .setEpisodeNumber(persistentTvEpisode.getEpisodeNumber())
-                .setSeasonNumber(persistentTvEpisode.getSeason().getSeasonNumber())
-                .setAirDate(persistentTvEpisode.getAirDate())
-                .setOverview(persistentTvEpisode.getOverview())
-                .setStillPath(persistentTvEpisode.getStillPath())
-                .setVoteAverage(persistentTvEpisode.getVoteAverage())
-                .setVoteCount(persistentTvEpisode.getVoteCount());
     }
 }

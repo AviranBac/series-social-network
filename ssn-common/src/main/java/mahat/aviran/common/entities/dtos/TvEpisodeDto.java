@@ -2,6 +2,7 @@ package mahat.aviran.common.entities.dtos;
 
 import lombok.*;
 import lombok.experimental.Accessors;
+import mahat.aviran.common.entities.persistence.PersistentTvEpisode;
 
 @Accessors(chain = true)
 @Getter @Setter @ToString @EqualsAndHashCode @AllArgsConstructor @NoArgsConstructor
@@ -16,4 +17,17 @@ public class TvEpisodeDto {
     private String stillPath;
     private double voteAverage;
     private int voteCount;
+
+    public static TvEpisodeDto from(PersistentTvEpisode persistentTvEpisode) {
+        return new TvEpisodeDto()
+                .setId(persistentTvEpisode.getId())
+                .setName(persistentTvEpisode.getName())
+                .setEpisodeNumber(persistentTvEpisode.getEpisodeNumber())
+                .setSeasonNumber(persistentTvEpisode.getSeason().getSeasonNumber())
+                .setAirDate(persistentTvEpisode.getAirDate())
+                .setOverview(persistentTvEpisode.getOverview())
+                .setStillPath(persistentTvEpisode.getStillPath())
+                .setVoteAverage(persistentTvEpisode.getVoteAverage())
+                .setVoteCount(persistentTvEpisode.getVoteCount());
+    }
 }

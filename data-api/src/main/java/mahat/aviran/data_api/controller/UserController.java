@@ -1,15 +1,12 @@
 package mahat.aviran.data_api.controller;
 
 import lombok.RequiredArgsConstructor;
-import mahat.aviran.data_api.dtos.PageDto;
 import mahat.aviran.common.entities.dtos.UserDto;
+import mahat.aviran.data_api.dtos.PageDto;
 import mahat.aviran.data_api.services.UserService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.Optional;
 
@@ -19,6 +16,15 @@ import java.util.Optional;
 public class UserController {
 
     private final UserService userService;
+
+    @GetMapping()
+    @ResponseBody
+    public PageDto<UserDto> getUsersByFilter(@RequestParam int page,
+                                                 @RequestParam(required = false, defaultValue = "") String userName,
+                                                 @RequestParam(required = false, defaultValue = "") String firstName,
+                                                 @RequestParam(required = false, defaultValue = "") String lastName) {
+        return userService.getUsersByFilter(page, userName, firstName, lastName);
+    }
 
     @GetMapping("{username}")
     public ResponseEntity<Object> getUserDetails(@PathVariable String username) {
