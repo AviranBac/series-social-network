@@ -34,14 +34,14 @@ public class UserService {
 
         Page<UserDto> pageResult = this.userRepository
                 .findAll(specification, PageRequest.of(page, PAGE_SIZE))
-                .map(this::convertUserToDto);
+                .map(UserDto::from);
 
         return PageDto.from(pageResult);
     }
 
     public Optional<UserDto> getUserDetails(String username) {
         return this.userRepository.findById(username)
-                .map(this::convertUserToDto);
+                .map(UserDto::from);
     }
 
     public Optional<PageDto<UserDto>> getUserFollowers(String username, int page) {
@@ -53,7 +53,7 @@ public class UserService {
 
         return Optional.of(this.followRepository.findAllByUsernameTo(tempPersistentUser, PageRequest.of(page, PAGE_SIZE))
                 .map(FollowRepository.Follower::getUsernameFrom)
-                .map(this::convertUserToDto))
+                .map(UserDto::from))
                 .map(PageDto::from);
     }
 
@@ -66,22 +66,15 @@ public class UserService {
 
         return Optional.of(this.followRepository.findAllByUsernameFrom(tempPersistentUser, PageRequest.of(page, PAGE_SIZE))
                 .map(FollowRepository.Following::getUsernameTo)
-                .map(this::convertUserToDto))
+                .map(UserDto::from))
                 .map(PageDto::from);
     }
 
     public PageDto<UserDto> getFollowedUsers(int page, Sort.Direction direction) {
         Page<UserDto> sortedFollowedUsers = this.userRepository.findFollowedUsers(
                 PageRequest.of(page, PAGE_SIZE, Sort.by(direction, "followed_users.count"))
-        ).map(this::convertUserToDto);
+        ).map(UserDto::from);
 
         return PageDto.from(sortedFollowedUsers);
-    }
-
-    private UserDto convertUserToDto(PersistentUser persistentUser) {
-        return new UserDto()
-                .setUserName(persistentUser.getUserName())
-                .setFirstName(persistentUser.getFirstName())
-                .setLastName(persistentUser.getLastName());
     }
 }

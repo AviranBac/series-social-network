@@ -36,7 +36,7 @@ public class FollowService {
         follow = new PersistentFollow()
                 .setUsernameFrom(this.userRepository.findById(usernameFrom).get())
                 .setUsernameTo(this.userRepository.findById(usernameTo).get());
-        return this.convertPersistentFollowToDto(this.followRepository.save(follow));
+        return FollowDto.from(this.followRepository.save(follow));
     }
 
     @Transactional
@@ -50,7 +50,7 @@ public class FollowService {
         }
 
         this.followRepository.delete(follow);
-        return this.convertPersistentFollowToDto(follow);
+        return FollowDto.from(follow);
     }
 
     private void validateUserInput(String usernameFrom, String usernameTo) {
@@ -61,11 +61,5 @@ public class FollowService {
         if (this.userRepository.existsById(usernameTo)) {
             throw new UsernameToNotFoundException();
         }
-    }
-
-    private FollowDto convertPersistentFollowToDto(PersistentFollow persistentFollow) {
-        return new FollowDto()
-                .setFrom(persistentFollow.getUsernameFrom().getUserName())
-                .setTo(persistentFollow.getUsernameTo().getUserName());
     }
 }
