@@ -1,0 +1,31 @@
+spring:
+  jpa:
+    hibernate:
+      ddl-auto: update
+    database-platform: org.hibernate.dialect.PostgreSQLDialect
+    properties:
+      javax:
+        persistence:
+          create-database-schemas: true
+      hibernate:
+        default_schema: ${DB_SCHEMA_NAME}
+  datasource:
+    url: "jdbc:postgresql://localhost:5432/${DB_NAME}"
+    username: ${DB_USERNAME}
+    password: ${DB_PASSWORD}
+    hikari:
+      minimum-idle: 5
+      maximum-pool-size: 10
+      pool-name: HikariCP-Aviran-Data-API
+  security:
+    oauth2:
+      resourceserver:
+        jwt:
+          jwk-set-uri: https://dev-52403713.okta.com/oauth2/seriesSocialNetwork/v1/keys
+
+server:
+  port: 8083
+
+logging:
+  level:
+    org.springframework.web: TRACE

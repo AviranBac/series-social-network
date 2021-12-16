@@ -1,0 +1,32 @@
+package mahat.aviran.data_api.dtos;
+
+import lombok.*;
+import lombok.experimental.Accessors;
+import mahat.aviran.common.entities.dtos.TvEpisodeDto;
+import mahat.aviran.common.entities.persistence.PersistentTvSeason;
+
+import java.util.List;
+
+@Accessors(chain = true)
+@Getter @Setter @ToString @EqualsAndHashCode @AllArgsConstructor @NoArgsConstructor
+public class TvSeasonDto {
+
+    private String id;
+    private String name;
+    private String seasonNumber;
+    private String airDate;
+    private String overview;
+    private String posterPath;
+    private List<TvEpisodeDto> episodes;
+
+    public static TvSeasonDto from(PersistentTvSeason persistentTvSeason, List<TvEpisodeDto> tvEpisodeDtos) {
+        return new TvSeasonDto()
+                .setId(persistentTvSeason.getId())
+                .setName(persistentTvSeason.getName())
+                .setSeasonNumber(persistentTvSeason.getSeasonNumber())
+                .setAirDate(persistentTvSeason.getAirDate())
+                .setOverview(persistentTvSeason.getOverview())
+                .setPosterPath(persistentTvSeason.getPosterPath())
+                .setEpisodes(tvEpisodeDtos);
+    }
+}

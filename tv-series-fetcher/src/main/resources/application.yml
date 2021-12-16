@@ -1,2 +1,26 @@
+spring:
+  jpa:
+    hibernate:
+      ddl-auto: validate
+    database-platform: org.hibernate.dialect.PostgreSQLDialect
+    properties:
+      javax:
+        persistence:
+          create-database-schemas: true
+      hibernate:
+        default_schema: ${DB_SCHEMA_NAME}
+  datasource:
+    url: "jdbc:postgresql://localhost:5432/${DB_NAME}"
+    username: ${DB_USERNAME}
+    password: ${DB_PASSWORD}
+    hikari:
+      minimum-idle: 5
+      maximum-pool-size: 10
+      pool-name: HikariCP-Aviran-Tv-Series-Fetcher
+
 server:
   port: 8081
+
+apiRequest:
+  websiteUrl: https://api.themoviedb.org/3/
+  apiKey: ${TMDB_API_KEY}
