@@ -37,6 +37,7 @@ typings/
 coverage/
 node_modules/
 tmp/
+.angular/
 npm-debug.log*
 yarn-error.log*
 .ng_pkg_build/
