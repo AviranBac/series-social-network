@@ -24,6 +24,10 @@ spring:
             - Path=/data/**
           filters:
             - RewritePath=/data(?<segment>/?.*), $\{segment}
+        - id: client
+          uri: http://localhost:4200
+          predicates:
+            - Path=/**
       default-filters:
         - TokenRelay=
         - RemoveRequestHeader=Cookie

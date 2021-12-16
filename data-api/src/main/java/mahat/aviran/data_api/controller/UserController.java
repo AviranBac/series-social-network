@@ -6,6 +6,8 @@ import mahat.aviran.data_api.dtos.PageDto;
 import mahat.aviran.data_api.services.UserService;
 import org.springframework.data.domain.Sort;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.security.oauth2.jwt.Jwt;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
@@ -25,6 +27,11 @@ public class UserController {
                                              @RequestParam(required = false, defaultValue = "") String firstName,
                                              @RequestParam(required = false, defaultValue = "") String lastName) {
         return userService.getUsersByFilter(page, userName, firstName, lastName);
+    }
+
+    @GetMapping("self")
+    public ResponseEntity<Object> getUserDetails(@AuthenticationPrincipal Jwt jwt) {
+        return this.getUserDetails(jwt.getSubject());
     }
 
     @GetMapping("{username}")

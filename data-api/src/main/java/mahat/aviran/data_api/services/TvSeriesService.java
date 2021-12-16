@@ -22,6 +22,7 @@ import org.springframework.data.domain.Sort;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 
+import javax.transaction.Transactional;
 import java.util.List;
 import java.util.Optional;
 import java.util.Set;
@@ -40,6 +41,7 @@ public class TvSeriesService {
     private final FollowRepository followRepository;
     private final int PAGE_SIZE = 20;
 
+    @Transactional
     public PageDto<TvSeriesDto> getSeriesByFilter(int page,
                                                   String nameCriteria,
                                                   Set<SeriesStatus> seriesStatusCriteria,
@@ -55,11 +57,13 @@ public class TvSeriesService {
         return PageDto.from(pageResult);
     }
 
+    @Transactional
     public Optional<TvSeriesExtendedDto> getSeriesDetailsById(String seriesId) {
         return this.tvSeriesRepository.findById(seriesId)
                 .map(this::convertSeriesToExtendedDto);
     }
 
+    @Transactional
     public PageDto<TvSeriesDto> getCommonSeriesAmongFollowing(int page, String username) {
         PersistentUser tempPersistentUser = new PersistentUser().setUserName(username);
 
@@ -76,6 +80,7 @@ public class TvSeriesService {
         return PageDto.from(commonSeries);
     }
 
+    @Transactional
     public PageDto<TvSeriesDto> getMostWatchedSeries(int page, Sort.Direction direction) {
         Page<TvSeriesDto> mostWatchedSeries = this.tvSeriesRepository.getWatchedSeries(
                 PageRequest.of(page, PAGE_SIZE, Sort.by(direction, "common_series.count"))

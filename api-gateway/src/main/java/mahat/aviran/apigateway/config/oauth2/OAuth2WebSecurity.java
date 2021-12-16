@@ -24,10 +24,13 @@ public class OAuth2WebSecurity {
                 .pathMatchers("/actuator/**").permitAll()
                 .anyExchange()
                 .authenticated()
-                .and().oauth2Login()
-                .authenticationSuccessHandler(authenticationSuccessHandler())
-                .and().logout()
-                .and().oauth2ResourceServer().jwt();
+                .and()
+                    .oauth2Login()
+                    .authenticationSuccessHandler(authenticationSuccessHandler())
+                .and()
+                    .logout()
+                .and()
+                    .oauth2ResourceServer().jwt();
         return http.build();
     }
 

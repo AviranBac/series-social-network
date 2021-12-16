@@ -13,6 +13,7 @@ import mahat.aviran.data_api.dtos.TvSeasonDto;
 import mahat.aviran.data_api.dtos.TvSeriesDto;
 import org.springframework.stereotype.Service;
 
+import javax.transaction.Transactional;
 import java.util.Collections;
 import java.util.List;
 import java.util.Map;
@@ -27,6 +28,7 @@ public class WatchlistService {
     private final TvSeasonRepository tvSeasonRepository;
     private final TvEpisodeRepository tvEpisodeRepository;
 
+    @Transactional
     public List<TvSeriesDto> getAllWatchlistSeries(String username) {
         return this.tvSeriesRepository.getWatchlistTvSeries(Collections.singleton(username))
                 .stream()
@@ -34,6 +36,7 @@ public class WatchlistService {
                 .collect(Collectors.toList());
     }
 
+    @Transactional
     public List<TvSeasonDto> getWatchlistSeasonsAndEpisodesBySeries(String username, String seriesId) {
         Map<PersistentTvSeason, List<PersistentTvEpisode>> persistentSeasonsAndEpisodes = this.tvEpisodeRepository.getWatchlistEpisodesBySeries(username, seriesId)
                 .stream()
