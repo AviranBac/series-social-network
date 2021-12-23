@@ -3,7 +3,7 @@ import {MediaMatcher} from "@angular/cdk/layout";
 import {Store} from "@ngrx/store";
 import * as UserState from '../../../root-store/user/user.state';
 import * as UserSelectors from '../../../root-store/user/user.selectors';
-import {filter, map, Observable, switchMap} from "rxjs";
+import {filter, map, Observable} from "rxjs";
 import {environment} from "../../../../environments/environment";
 
 interface MenuOptions {

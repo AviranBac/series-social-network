@@ -39,7 +39,7 @@ public class TvSeriesService {
     private final TvSeasonRepository tvSeasonRepository;
     private final TvEpisodeRepository tvEpisodeRepository;
     private final FollowRepository followRepository;
-    private final int PAGE_SIZE = 20;
+    private final int PAGE_SIZE = 10;
 
     @Transactional
     public PageDto<TvSeriesDto> getSeriesByFilter(int page,

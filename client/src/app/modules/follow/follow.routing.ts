@@ -1,6 +1,6 @@
 import {Routes} from "@angular/router";
 import {YourFollowingComponent} from "./your-following/your-following.component";
-import {AppComponent} from "../../app.component";
+import {YourFollowersComponent} from "./your-followers/your-followers.component";
 
 export const routes: Routes = [
   {
@@ -8,7 +8,7 @@ export const routes: Routes = [
     component: YourFollowingComponent
   },
   {
-    path: ':username/follower',
-    component: AppComponent
+    path: ':username/followers',
+    component: YourFollowersComponent
   }
 ];

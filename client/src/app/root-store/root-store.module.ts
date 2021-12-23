@@ -5,17 +5,21 @@ import * as UserState from './user/user.state';
 import * as UserReducer from './user/user.reducer';
 import {environment} from "../../environments/environment";
 import {StoreDevtoolsModule} from "@ngrx/store-devtools";
+import {routerReducer, RouterState, StoreRouterConnectingModule} from "@ngrx/router-store";
 
 export interface State {
-  user: UserState.State
+  user: UserState.State,
+  router: RouterState
 }
 
 const reducers: ActionReducerMap<State> = {
-  user: UserReducer.userReducer
+  user: UserReducer.userReducer,
+  router: routerReducer
 };
 
 const initialState: State = {
-  user: UserState.initialState
+  user: UserState.initialState,
+  router: RouterState.Minimal
 };
 
 @NgModule({
@@ -23,6 +27,7 @@ const initialState: State = {
   imports: [
     CommonModule,
     StoreModule.forRoot(reducers),
+    StoreRouterConnectingModule.forRoot(),
     !environment.production ? StoreDevtoolsModule.instrument() : []
   ]
 })

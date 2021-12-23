@@ -8,13 +8,18 @@ import {MatIconModule} from "@angular/material/icon";
 import {MatSidenavModule} from "@angular/material/sidenav";
 import {MatListModule} from "@angular/material/list";
 import {RouterModule} from "@angular/router";
+import {PaginationTableComponent} from './components/pagination-table/pagination-table.component';
+import {MatTableModule} from "@angular/material/table";
+import {NgxPaginationModule} from "ngx-pagination";
 
 @NgModule({
   declarations: [
-    NavBarComponent
+    NavBarComponent,
+    PaginationTableComponent
   ],
   exports: [
-    NavBarComponent
+    NavBarComponent,
+    PaginationTableComponent
   ],
   imports: [
     CommonModule,
@@ -24,7 +29,9 @@ import {RouterModule} from "@angular/router";
     MatIconModule,
     MatListModule,
     MatSidenavModule,
-    RouterModule
+    RouterModule,
+    MatTableModule,
+    NgxPaginationModule
   ]
 })
 export class SharedModule { }

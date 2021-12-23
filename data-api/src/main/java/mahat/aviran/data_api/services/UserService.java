@@ -25,7 +25,7 @@ public class UserService {
 
     private final UserRepository userRepository;
     private final FollowRepository followRepository;
-    private final int PAGE_SIZE = 20;
+    private final int PAGE_SIZE = 10;
 
     public PageDto<UserDto> getUsersByFilter(int page, String userName, String firstName, String lastName) {
         Specification<PersistentUser> specification = userNameStartsWith(userName)

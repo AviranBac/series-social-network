@@ -1,5 +1,5 @@
-import { HttpClient, HttpParams } from '@angular/common/http';
-import { Injectable } from '@angular/core';
+import {HttpClient} from '@angular/common/http';
+import {Injectable} from '@angular/core';
 import {User} from "../../shared/models/user";
 import {environment} from "../../../environments/environment";
 import {Page} from "../../shared/models/page";
@@ -13,9 +13,17 @@ export class FollowService {
 
   loadFollowing(username: string, page: number) {
     const params = {
-      page: page
+      page: page - 1
     };
 
     return this.http.get<Page<User>>(`${environment.apiGatewayUrl}/data/users/${username}/following`, { params });
+  }
+
+  loadFollowers(username: string, page: number) {
+    const params = {
+      page: page - 1
+    };
+
+    return this.http.get<Page<User>>(`${environment.apiGatewayUrl}/data/users/${username}/followers`, { params });
   }
 }
