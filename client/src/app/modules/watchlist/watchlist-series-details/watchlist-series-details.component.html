@@ -1,8 +1,8 @@
 <mat-accordion>
-  <mat-expansion-panel *ngFor="let season of tvSeasons$ | async">
+  <mat-expansion-panel class="centralize-grid" *ngFor="let season of tvSeasons$ | async">
     <mat-expansion-panel-header>
       <mat-panel-title>
-        <img [src]="season.posterPath" [alt]="season.name" />
+        <img class="centralize-grid" [src]="season.posterPath" [alt]="season.name" />
         <div class="season-summary">
           <h2 class="season-name">{{season.name}}</h2>
           <span class="season-description">

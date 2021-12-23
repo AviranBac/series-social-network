@@ -35,7 +35,7 @@ export class PaginationTableComponent<T> implements OnInit {
     this.getPage(1);
   }
 
-  calculatePosition(currentIndex: number) {
+  calculatePosition(currentIndex: number): number {
     return currentIndex + 1 + (this.currentDisplayedPage - 1) * Number(this.itemsPerPage);
   }
 

@@ -27,3 +27,7 @@
     </ng-template>
   </mat-expansion-panel>
 </mat-accordion>
+
+<div class="empty-message centralize-text" *ngIf="(watchlist$ | async)?.length === 0">
+  You have 0 series in your watchlist.
+</div>
