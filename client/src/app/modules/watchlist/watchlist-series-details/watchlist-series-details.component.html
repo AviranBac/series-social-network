@@ -1,0 +1,26 @@
+<mat-accordion>
+  <mat-expansion-panel *ngFor="let season of tvSeasons$ | async">
+    <mat-expansion-panel-header>
+      <mat-panel-title>
+        <img [src]="season.posterPath" [alt]="season.name" />
+        <div class="season-summary">
+          <h2 class="season-name">{{season.name}}</h2>
+          <span class="season-description">
+            Number of watched episodes: {{season.episodes.length}}
+          </span>
+          <p class="season-overview">
+            {{series.overview}}
+          </p>
+        </div>
+      </mat-panel-title>
+    </mat-expansion-panel-header>
+
+    <ng-template matExpansionPanelContent>
+      <mat-list>
+        <mat-list-item *ngFor="let episode of season.episodes">
+          Episode {{episode.episodeNumber}}: {{episode.name}}
+        </mat-list-item>
+      </mat-list>
+    </ng-template>
+  </mat-expansion-panel>
+</mat-accordion>
