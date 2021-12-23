@@ -3,7 +3,7 @@ import {MediaMatcher} from "@angular/cdk/layout";
 import {Store} from "@ngrx/store";
 import * as UserState from '../../../root-store/user/user.state';
 import * as UserSelectors from '../../../root-store/user/user.selectors';
-import {Observable} from "rxjs";
+import {filter, map, Observable, switchMap} from "rxjs";
 import {environment} from "../../../../environments/environment";
 
 interface MenuOptions {
@@ -19,6 +19,7 @@ interface MenuOptions {
 })
 export class NavBarComponent implements OnDestroy {
   mobileQuery: MediaQueryList;
+  username$: Observable<string | undefined>;
   fullName$: Observable<string | undefined>;
   logoutUrl: string;
 
@@ -29,12 +30,7 @@ export class NavBarComponent implements OnDestroy {
     { icon: 'poll', value: 'Statistics', routerLink: '/statistics' },
   ];
 
-  userNavOptions: MenuOptions[] = [
-    { icon: 'account_circle', value: 'Update Your Details', routerLink: '/user/update' },
-    { icon: 'visibility', value: 'Your Watchlist', routerLink: '/watchlist' },
-    { icon: 'people_outline', value: 'Your Following', routerLink: '/following' },
-    { icon: 'people_outline', value: 'Your Followers', routerLink: '/followers' },
-  ];
+  userNavOptions$: Observable<MenuOptions[]>;
 
   private mobileQueryListener: () => void;
 
@@ -49,6 +45,17 @@ export class NavBarComponent implements OnDestroy {
 
   ngOnInit() {
     this.fullName$ = this.userStore$.select<string | undefined>(UserSelectors.selectFullName);
+
+    this.userNavOptions$ = this.userStore$.select<string | undefined>(UserSelectors.selectUsername).pipe(
+      filter(username => !!username),
+      map(username => username as string),
+      map((username: string) => [
+        { icon: 'account_circle', value: 'Update Your Details', routerLink: '/user/update' },
+        { icon: 'visibility', value: 'Your Watchlist', routerLink: '/watchlist' },
+        { icon: 'people_outline', value: 'Your Following', routerLink: `/follow/${username}/following` },
+        { icon: 'people_outline', value: 'Your Followers', routerLink: `/follow/${username}/followers` }
+      ])
+    );
   }
 
   ngOnDestroy(): void {

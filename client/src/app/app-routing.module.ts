@@ -15,6 +15,11 @@ const routes: Routes = [
     loadChildren: () => import('./modules/watchlist/watchlist.module').then(m => m.WatchlistModule)
   },
   {
+    path: 'follow',
+    canLoad: [AuthenticationGuard],
+    loadChildren: () => import('./modules/follow/follow.module').then(m => m.FollowModule)
+  },
+  {
     path: '**',
     redirectTo: '',
     pathMatch: 'full'

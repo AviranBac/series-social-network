@@ -13,7 +13,7 @@
     </button>
 
     <mat-menu #menu="matMenu">
-      <a mat-menu-item *ngFor="let menuItem of userNavOptions" routerLink="{{menuItem.routerLink}}">
+      <a mat-menu-item *ngFor="let menuItem of userNavOptions$ | async" routerLink="{{menuItem.routerLink}}">
         <mat-icon>{{menuItem.icon}}</mat-icon>
         <span>{{menuItem.value}}</span>
       </a>
