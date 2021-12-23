@@ -1,7 +1,7 @@
 <h1 class="page-title">Your Following</h1>
 
 <ul class="following-list">
-  <li *ngFor="let user of following$ | async | paginate: { id: 'following', itemsPerPage: 10, currentPage: p, totalItems: totalItems }">
+  <li *ngFor="let user of (following$ | async)! | paginate: { id: 'following', itemsPerPage: 10, currentPage: p, totalItems: totalItems }">
     {{ user }}
   </li>
 </ul>
