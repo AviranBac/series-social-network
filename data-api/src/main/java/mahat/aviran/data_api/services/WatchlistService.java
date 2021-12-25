@@ -15,6 +15,7 @@ import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
 import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
@@ -48,9 +49,11 @@ public class WatchlistService {
                     List<TvEpisodeDto> tvEpisodeDtos = persistentSeasonsAndEpisodes.get(persistentTvSeason)
                             .stream()
                             .map(TvEpisodeDto::from)
+                            .sorted(Comparator.comparingInt(TvEpisodeDto::getEpisodeNumber))
                             .collect(Collectors.toList());
                     return TvSeasonDto.from(persistentTvSeason, tvEpisodeDtos);
                 })
+                .sorted(Comparator.comparingInt(TvSeasonDto::getSeasonNumber))
                 .collect(Collectors.toList());
     }
 }

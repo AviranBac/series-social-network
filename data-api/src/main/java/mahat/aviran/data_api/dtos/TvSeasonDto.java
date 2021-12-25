@@ -13,7 +13,7 @@ public class TvSeasonDto {
 
     private String id;
     private String name;
-    private String seasonNumber;
+    private int seasonNumber;
     private String airDate;
     private String overview;
     private String posterPath;
@@ -23,7 +23,7 @@ public class TvSeasonDto {
         return new TvSeasonDto()
                 .setId(persistentTvSeason.getId())
                 .setName(persistentTvSeason.getName())
-                .setSeasonNumber(persistentTvSeason.getSeasonNumber())
+                .setSeasonNumber(Integer.parseInt(persistentTvSeason.getSeasonNumber()))
                 .setAirDate(persistentTvSeason.getAirDate())
                 .setOverview(persistentTvSeason.getOverview())
                 .setPosterPath(persistentTvSeason.getPosterPath())
