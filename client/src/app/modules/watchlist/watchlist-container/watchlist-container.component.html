@@ -4,14 +4,14 @@
   <mat-expansion-panel *ngFor="let series of watchlist$ | async">
     <mat-expansion-panel-header>
       <mat-panel-title>
-        <img [src]="series.posterPath" [alt]="series.name" />
+        <img [src]="series.posterPath ? series.posterPath : '/assets/no-image-placeholder.svg'" [ngClass]="{'error-image': !series.posterPath}">
         <div class="series-summary">
-          <h2 class="series-name">{{series.name}}</h2>
+          <a [routerLink]="['/series', series.id]"><h2 class="series-name">{{series.name}}</h2></a>
           <span class="series-description">
             Number of seasons: {{series.numberOfSeasons}} |
             Number of episodes: {{series.numberOfEpisodes}} |
             Status: {{getStatusValue(series.status)}} |
-            {{series.genres}}
+            {{series.genres.join(', ')}}
           </span>
           <p class="series-overview">
             {{series.overview}}

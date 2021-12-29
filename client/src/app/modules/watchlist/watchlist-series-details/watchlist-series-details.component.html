@@ -2,7 +2,7 @@
   <mat-expansion-panel class="centralize-grid" *ngFor="let season of tvSeasons$ | async">
     <mat-expansion-panel-header>
       <mat-panel-title>
-        <img [src]="season.posterPath" [alt]="season.name" />
+        <img [src]="season.posterPath ? season.posterPath : '/assets/no-image-placeholder.svg'" [ngClass]="{'error-image': !season.posterPath}">
         <div class="season-summary">
           <h2 class="season-name">{{season.name}}</h2>
           <span class="season-description">

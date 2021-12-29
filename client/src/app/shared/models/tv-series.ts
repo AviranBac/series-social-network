@@ -1,4 +1,5 @@
 import {SeriesStatus} from "./series-status";
+import {TvSeason} from "./tv-season";
 
 export interface TvSeries {
   id: string,
@@ -14,4 +15,8 @@ export interface TvSeries {
   numberOfSeasons: number,
   status: SeriesStatus,
   genres: string[]
+}
+
+export interface ExtendedTvSeries extends TvSeries {
+  seasons: TvSeason[]
 }

@@ -60,7 +60,8 @@ public class TvSeriesService {
     @Transactional
     public Optional<TvSeriesExtendedDto> getSeriesDetailsById(String seriesId) {
         return this.tvSeriesRepository.findById(seriesId)
-                .map(this::convertSeriesToExtendedDto);
+                .map(this::convertSeriesToExtendedDto)
+                .map(TvSeriesExtendedDto::sortSeasons);
     }
 
     @Transactional
@@ -87,6 +88,24 @@ public class TvSeriesService {
         ).map(TvSeriesDto::from);
 
         return PageDto.from(mostWatchedSeries);
+    }
+
+    @Transactional
+    public PageDto<TvSeriesDto> getTopRatedSeries(int page) {
+        Page<TvSeriesDto> topRatedSeries = this.tvSeriesRepository.getAllByOrderByVoteAverageDesc(
+                PageRequest.of(page, PAGE_SIZE)
+        ).map(TvSeriesDto::from);
+
+        return PageDto.from(topRatedSeries);
+    }
+
+    @Transactional
+    public PageDto<TvSeriesDto> getMostPopularSeries(int page) {
+        Page<TvSeriesDto> topRatedSeries = this.tvSeriesRepository.getAllByOrderByPopularityDesc(
+                PageRequest.of(page, PAGE_SIZE)
+        ).map(TvSeriesDto::from);
+
+        return PageDto.from(topRatedSeries);
     }
 
     private TvSeriesExtendedDto convertSeriesToExtendedDto(PersistentTvSeries persistentTvSeries) {

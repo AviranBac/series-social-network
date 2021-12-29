@@ -1,0 +1,16 @@
+<mat-card appMaterialElevation>
+  <div class="flex full-width">
+    <div class="entity-image-container">
+      <img *ngIf="imageSrc !== undefined" [src]="imageSrc ? imageSrc : '/assets/no-image-placeholder.svg'" [ngClass]="{'error-image': !imageSrc}">
+    </div>
+    <div class="summary">
+      <h2 class="name">{{name}}</h2>
+      <span class="description">
+        <ng-content select="[description]"></ng-content>
+      </span>
+      <p class="overview">{{overview}}</p>
+    </div>
+  </div>
+
+  <ng-content select="[footer]"></ng-content>
+</mat-card>

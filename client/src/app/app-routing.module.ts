@@ -1,13 +1,12 @@
 import {NgModule} from '@angular/core';
 import {RouterModule, Routes} from "@angular/router";
 import {AuthenticationGuard} from "./core/auth/authentication.guard";
-import {AppComponent} from "./app.component";
 
 const routes: Routes = [
   {
     path: '',
-    canActivate: [AuthenticationGuard],
-    component: AppComponent // TODO: Change to HomeComponent later
+    canLoad: [AuthenticationGuard],
+    loadChildren: () => import('./modules/home/home.module').then(m => m.HomeModule)
   },
   {
     path: 'watchlist',
@@ -18,6 +17,12 @@ const routes: Routes = [
     path: 'follow',
     canLoad: [AuthenticationGuard],
     loadChildren: () => import('./modules/follow/follow.module').then(m => m.FollowModule)
+  },
+  {
+
+    path: 'series',
+    canLoad: [AuthenticationGuard],
+    loadChildren: () => import('./modules/series-details/series-details.module').then(m => m.SeriesDetailsModule)
   },
   {
     path: '**',

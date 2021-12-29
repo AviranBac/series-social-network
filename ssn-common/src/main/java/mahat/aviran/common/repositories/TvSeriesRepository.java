@@ -51,6 +51,10 @@ public interface TvSeriesRepository extends JpaRepository<PersistentTvSeries, St
             nativeQuery = true)
     Page<PersistentTvSeries> getWatchedSeries(Pageable pageable);
 
+    Page<PersistentTvSeries> getAllByOrderByVoteAverageDesc(Pageable pageable);
+
+    Page<PersistentTvSeries> getAllByOrderByPopularityDesc(Pageable pageable);
+
     static Specification<PersistentTvSeries> nameStartsWith(String name) {
         return (tvSeries, criteriaQuery, criteriaBuilder) -> criteriaBuilder.like(criteriaBuilder.lower(tvSeries.get("name")), name.toLowerCase() + "%");
     }

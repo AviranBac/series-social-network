@@ -22,10 +22,10 @@ export class YourFollowingComponent {
   itemsPerPage: number = 10;
 
   constructor(private followService: FollowService,
-              private store: Store<RouterState>) {}
+              private routerStore: Store<RouterState>) {}
 
   getRequestFn(): (page: number) => Observable<Page<User>> {
-    return (page: number) => this.store.select(RouterSelectors.selectRouteParam('username')).pipe(
+    return (page: number) => this.routerStore.select(RouterSelectors.selectRouteParam('username')).pipe(
       filter(username => !!username),
       map(username => username as string),
       switchMap(username => this.followService.loadFollowing(username, page))

@@ -11,15 +11,18 @@ import {RouterModule} from "@angular/router";
 import {PaginationTableComponent} from './components/pagination-table/pagination-table.component';
 import {MatTableModule} from "@angular/material/table";
 import {NgxPaginationModule} from "ngx-pagination";
+import {MaterialElevationDirective} from "./directives/material-elevation.directive";
 
 @NgModule({
   declarations: [
     NavBarComponent,
-    PaginationTableComponent
+    PaginationTableComponent,
+    MaterialElevationDirective
   ],
   exports: [
     NavBarComponent,
-    PaginationTableComponent
+    PaginationTableComponent,
+    MaterialElevationDirective
   ],
   imports: [
     CommonModule,

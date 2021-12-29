@@ -5,7 +5,9 @@ import lombok.experimental.Accessors;
 import mahat.aviran.common.entities.dtos.TvEpisodeDto;
 import mahat.aviran.common.entities.persistence.PersistentTvSeason;
 
+import java.util.Comparator;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Accessors(chain = true)
 @Getter @Setter @ToString @EqualsAndHashCode @AllArgsConstructor @NoArgsConstructor
@@ -28,5 +30,12 @@ public class TvSeasonDto {
                 .setOverview(persistentTvSeason.getOverview())
                 .setPosterPath(persistentTvSeason.getPosterPath())
                 .setEpisodes(tvEpisodeDtos);
+    }
+
+    public TvSeasonDto sortEpisodes() {
+        this.episodes = this.episodes.stream()
+                .sorted(Comparator.comparingInt(TvEpisodeDto::getEpisodeNumber))
+                .collect(Collectors.toList());
+        return this;
     }
 }

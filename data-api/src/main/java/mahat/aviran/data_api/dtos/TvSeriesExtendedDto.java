@@ -4,7 +4,9 @@ import lombok.*;
 import lombok.experimental.Accessors;
 
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Accessors(chain = true)
 @Getter @Setter @ToString(callSuper = true) @EqualsAndHashCode(callSuper = true) @AllArgsConstructor @NoArgsConstructor
@@ -26,5 +28,12 @@ public class TvSeriesExtendedDto extends TvSeriesDto {
         this.numberOfSeasons = tvSeriesDto.numberOfSeasons;
         this.status = tvSeriesDto.status;
         this.genres = tvSeriesDto.genres;
+    }
+
+    public TvSeriesExtendedDto sortSeasons() {
+        this.seasons = this.seasons.stream()
+                .map(TvSeasonDto::sortEpisodes)
+                .sorted(Comparator.comparingInt(TvSeasonDto::getSeasonNumber)).collect(Collectors.toList());
+        return this;
     }
 }

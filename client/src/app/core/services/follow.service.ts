@@ -3,6 +3,7 @@ import {Injectable} from '@angular/core';
 import {User} from "../../shared/models/user";
 import {environment} from "../../../environments/environment";
 import {Page} from "../../shared/models/page";
+import {Observable} from "rxjs";
 
 @Injectable({
   providedIn: 'root'
@@ -11,7 +12,7 @@ export class FollowService {
 
   constructor(private http: HttpClient) { }
 
-  loadFollowing(username: string, page: number) {
+  loadFollowing(username: string, page: number): Observable<Page<User>> {
     const params = {
       page: page - 1
     };
@@ -19,7 +20,7 @@ export class FollowService {
     return this.http.get<Page<User>>(`${environment.apiGatewayUrl}/data/users/${username}/following`, { params });
   }
 
-  loadFollowers(username: string, page: number) {
+  loadFollowers(username: string, page: number): Observable<Page<User>> {
     const params = {
       page: page - 1
     };

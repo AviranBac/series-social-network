@@ -52,4 +52,16 @@ public class TvSeriesController {
                                                  @RequestParam Sort.Direction sort) {
         return tvSeriesService.getMostWatchedSeries(page, sort);
     }
+
+    @GetMapping("topRated")
+    @ResponseBody
+    public PageDto<TvSeriesDto> getTopRatedSeries(@RequestParam int page) {
+        return tvSeriesService.getTopRatedSeries(page);
+    }
+
+    @GetMapping("popular")
+    @ResponseBody
+    public PageDto<TvSeriesDto> getMostPopularSeries(@RequestParam int page) {
+        return tvSeriesService.getMostPopularSeries(page);
+    }
 }
