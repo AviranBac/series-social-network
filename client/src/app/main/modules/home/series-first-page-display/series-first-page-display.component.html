@@ -1,0 +1,22 @@
+<mat-card class="container-card centralize-grid">
+  <mat-card-title class="header-title">{{header}}</mat-card-title>
+  <mat-card-subtitle>{{subtitle}}</mat-card-subtitle>
+  <mat-card-content>
+    <ul class="series-grid flex">
+      <li *ngFor="let serie of series$ | async" class="serie-card-item">
+        <a [routerLink]="['/series', serie.id]">
+          <mat-card appMaterialElevation class="serie-card centralize-text">
+            <app-watchlist-ribbon></app-watchlist-ribbon>
+            <mat-card-title>{{ serie.name }}</mat-card-title>
+            <img class="serie-image centralize-text"
+                 [src]="serie.posterPath ? serie.posterPath : '/assets/no-image-placeholder.svg'"
+                 [ngClass]="{'error-image': !serie.posterPath}">
+          </mat-card>
+        </a>
+      </li>
+    </ul>
+  </mat-card-content>
+  <mat-card-actions align="end">
+    <a mat-button class="statistics-link" [routerLink]="expansionLink">Move to statistics for more</a>
+  </mat-card-actions>
+</mat-card>

@@ -1,10 +1,10 @@
 import {Injectable} from '@angular/core';
 import {HttpClient} from "@angular/common/http";
 import {Observable} from "rxjs";
-import {Page} from "../../shared/models/page";
+import {Page} from "../../main/shared/models/page";
 import {environment} from "../../../environments/environment";
-import {ExtendedTvSeries, TvSeries} from "../../shared/models/tv-series";
-import {Sort} from "../../shared/models/sort";
+import {ExtendedTvSeries, TvSeries} from "../../main/shared/models/tv-series";
+import {Sort} from "../../main/shared/models/sort";
 
 @Injectable({
   providedIn: 'root'

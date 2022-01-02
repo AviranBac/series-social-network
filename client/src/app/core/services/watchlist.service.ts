@@ -1,9 +1,9 @@
 import {Injectable} from '@angular/core';
 import {HttpClient} from "@angular/common/http";
 import {environment} from "../../../environments/environment";
-import {TvSeries} from "../../shared/models/tv-series";
+import {TvSeries} from "../../main/shared/models/tv-series";
 import {Observable} from "rxjs";
-import {TvSeason} from "../../shared/models/tv-season";
+import {TvSeason} from "../../main/shared/models/tv-season";
 
 @Injectable({
   providedIn: 'root'

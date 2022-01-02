@@ -1,8 +1,8 @@
 import {HttpClient} from '@angular/common/http';
 import {Injectable} from '@angular/core';
-import {User} from "../../shared/models/user";
+import {User} from "../../main/shared/models/user";
 import {environment} from "../../../environments/environment";
-import {Page} from "../../shared/models/page";
+import {Page} from "../../main/shared/models/page";
 import {Observable} from "rxjs";
 
 @Injectable({

@@ -1,11 +1,11 @@
 import {Injectable} from '@angular/core';
 import {HttpClient} from "@angular/common/http";
 import {Store} from "@ngrx/store";
-import * as UserState from '../../root-store/user/user.state';
-import * as UserActions from '../../root-store/user/user.actions';
+import * as UserState from '../../main/root-store/user/user.state';
+import * as UserActions from '../../main/root-store/user/user.actions';
 import {catchError, mapTo, Observable, of, tap} from "rxjs";
 import {environment} from "../../../environments/environment";
-import {User} from "../../shared/models/user";
+import {User} from "../../main/shared/models/user";
 
 @Injectable({
   providedIn: 'root'

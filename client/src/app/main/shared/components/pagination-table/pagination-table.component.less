@@ -1,0 +1,21 @@
+@import "../../../../../styles/styles";
+
+.pagination-footer {
+  text-align: center;
+  margin-top: 1rem;
+}
+
+.mat-table {
+  width: 50%;
+  max-width: 50%;
+
+  .mat-header-cell, .mat-cell {
+    margin: .5rem;
+  }
+}
+
+::ng-deep {
+  pagination-controls .ngx-pagination .current {
+    background: @primary-theme;
+  }
+}
