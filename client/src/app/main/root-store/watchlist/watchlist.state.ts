@@ -1,28 +1,36 @@
-import {TvSeries} from "../../shared/models/tv-series";
-import {createEntityAdapter, EntityAdapter, EntityState} from "@ngrx/entity";
-import {TvSeason} from "../../shared/models/tv-season";
+import {WatchlistTvSeries} from "../../shared/models/tv-series";
+import {Dictionary} from "@ngrx/entity";
+import {WatchlistTvSeason} from "../../shared/models/tv-season";
 import {TvEpisode} from "../../shared/models/tv-episode";
 
-export const seriesFeatureKey = 'watchlistSeries';
+export const seriesFeatureKey = 'series';
 export const seasonsFeatureKey = 'seasons';
+export const episodesFeatureKey = 'episodes';
 
-export const seriesAdapter : EntityAdapter<WatchlistTvSeries> = createEntityAdapter<WatchlistTvSeries>();
-export const seasonAdapter : EntityAdapter<WatchlistTvSeason> = createEntityAdapter<WatchlistTvSeason>();
-export const episodeAdapter : EntityAdapter<TvEpisode> = createEntityAdapter<TvEpisode>();
-
-export interface WatchlistTvEpisodeState extends EntityState<TvEpisode> {}
-
-export interface WatchlistTvSeason extends Omit<TvSeason, 'episodes'> {
-  episodes: WatchlistTvEpisodeState
+export interface WatchlistTvSeasonEntity extends Omit<WatchlistTvSeason, 'episodes'> {
+  episodes: string[]
 }
-export interface WatchlistTvSeasonState extends EntityState<WatchlistTvSeason> {}
-
-export interface WatchlistTvSeries extends TvSeries {
-  [seasonsFeatureKey]: WatchlistTvSeasonState
+export interface WatchlistTvSeriesEntity extends Omit<WatchlistTvSeries, 'seasons'> {
+  seasons: string[]
 }
-export interface State extends EntityState<WatchlistTvSeries> {}
 
-export const seriesInitialState: State = seriesAdapter.getInitialState();
-export const seasonsInitialState: WatchlistTvSeasonState = seasonAdapter.getInitialState();
-export const episodesInitialState: WatchlistTvEpisodeState = episodeAdapter.getInitialState();
+export type TvSeriesState = Dictionary<WatchlistTvSeriesEntity>;
+export type TvSeasonState = Dictionary<WatchlistTvSeasonEntity>;
+export type TvEpisodeState = Dictionary<TvEpisode>;
+
+export interface State {
+  [seriesFeatureKey]: TvSeriesState,
+  [seasonsFeatureKey]: TvSeasonState,
+  [episodesFeatureKey]: TvEpisodeState
+}
+
+export const seriesInitialState: TvSeriesState = {};
+export const seasonsInitialState: TvSeasonState = {};
+export const episodesInitialState: TvEpisodeState = {};
+
+export const initialState: State = {
+  series: seriesInitialState,
+  seasons: seasonsInitialState,
+  episodes: episodesInitialState
+}
 

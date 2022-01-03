@@ -81,7 +81,7 @@ public class WatchlistService {
 
     private List<PersistentTvEpisode> getTvEpisodesByEntity(WatchlistRecordDetails.EntityType entityType, String entityId) {
         switch (entityType) {
-            case SERIES:  return this.tvEpisodeRepository.getEpisodeIdsBySeriesId(entityId);
+            case SERIES:  return this.tvEpisodeRepository.getEpisodeIdsBySeriesIds(Set.of(entityId));
             case SEASON:  return this.tvEpisodeRepository.getEpisodesBySeasonId(entityId);
             case EPISODE: return this.tvEpisodeRepository.findAllById(Set.of(entityId));
             default: return List.of();

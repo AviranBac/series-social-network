@@ -1,14 +1,23 @@
 import * as WatchlistState from "./watchlist.state";
-import {seriesAdapter} from "./watchlist.state";
-import {createFeatureSelector} from "@ngrx/store";
+import {TvSeriesState, WatchlistTvSeriesEntity} from "./watchlist.state";
+import {createFeatureSelector, createSelector} from "@ngrx/store";
+import {WatchlistStatus} from "../../shared/models/watchlist-status";
 
-export const selectWatchlistSeriesState = createFeatureSelector<WatchlistState.State>(
-  WatchlistState.seriesFeatureKey,
+export const selectWatchlistSeriesState = createFeatureSelector<TvSeriesState>(
+  WatchlistState.seriesFeatureKey
 );
 
-export const {
-  selectAll,
-  selectEntities,
-  selectIds,
-  selectTotal
-} = seriesAdapter.getSelectors(selectWatchlistSeriesState);
+export const selectAllSeries = createSelector(
+  selectWatchlistSeriesState,
+  entities => (entities ? Object.values(entities) : []) as unknown as WatchlistTvSeriesEntity[]
+);
+
+export const selectSeries = (seriesId: string) => createSelector(
+  selectWatchlistSeriesState,
+  entities => entities[seriesId]
+);
+
+export const selectWatchlistStatus = (seriesId: string) => createSelector(
+  selectSeries(seriesId),
+  series => series?.watchlistStatus || WatchlistStatus.NONE
+);

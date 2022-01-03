@@ -1,7 +1,9 @@
 import {SeriesStatus} from "./series-status";
-import {TvSeason} from "./tv-season";
+import {TvSeason, WatchlistTvSeason} from "./tv-season";
+import {WatchlistStatus} from "./watchlist-status";
 
 export interface TvSeries {
+  discriminator: 'series';
   id: string,
   name: string,
   firstAirDate: string, // TODO
@@ -19,4 +21,13 @@ export interface TvSeries {
 
 export interface ExtendedTvSeries extends TvSeries {
   seasons: TvSeason[]
+}
+
+export interface WatchlistTvSeries extends TvSeries {
+  seasons: WatchlistTvSeason[],
+  watchlistStatus: WatchlistStatus
+}
+
+export function isSeries(object: any): object is WatchlistTvSeries {
+  return object.discriminator === 'series';
 }

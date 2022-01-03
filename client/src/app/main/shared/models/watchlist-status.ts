@@ -1,5 +1,5 @@
 export enum WatchlistStatus {
-  NOT_STARTED,
-  PARTIAL,
-  DONE
+  NONE = 'NONE',
+  PARTIAL = 'PARTIAL',
+  COMPLETE = 'COMPLETE'
 }

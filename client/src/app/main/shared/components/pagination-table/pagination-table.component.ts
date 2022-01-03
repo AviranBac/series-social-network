@@ -23,7 +23,8 @@ export class PaginationTableComponent<T> implements OnInit {
   displayedColumns: string[] = [this.positionColumn];
   currentDisplayedPage: number = 1;
   totalItems: number;
-  loading: boolean;
+
+  private loading: boolean;
 
   constructor() { }
 

@@ -2,6 +2,7 @@ package mahat.aviran.data_api.dtos;
 
 import lombok.*;
 import lombok.experimental.Accessors;
+import mahat.aviran.common.entities.persistence.PersistentTvSeries;
 
 import java.util.ArrayList;
 import java.util.Comparator;
@@ -15,19 +16,17 @@ public class TvSeriesExtendedDto extends TvSeriesDto {
     private List<TvSeasonDto> seasons = new ArrayList<>();
 
     public TvSeriesExtendedDto(TvSeriesDto tvSeriesDto) {
-        this.id = tvSeriesDto.id;
-        this.name = tvSeriesDto.name;
-        this.firstAirDate = tvSeriesDto.firstAirDate;
-        this.originalLanguage = tvSeriesDto.originalLanguage;
-        this.overview = tvSeriesDto.overview;
-        this.posterPath = tvSeriesDto.posterPath;
-        this.popularity = tvSeriesDto.popularity;
-        this.voteAverage = tvSeriesDto.voteAverage;
-        this.voteCount = tvSeriesDto.voteCount;
-        this.numberOfEpisodes = tvSeriesDto.numberOfEpisodes;
-        this.numberOfSeasons = tvSeriesDto.numberOfSeasons;
-        this.status = tvSeriesDto.status;
-        this.genres = tvSeriesDto.genres;
+        super(tvSeriesDto);
+    }
+
+    public TvSeriesExtendedDto(TvSeriesExtendedDto tvSeriesExtendedDto) {
+        super(tvSeriesExtendedDto);
+        this.seasons = tvSeriesExtendedDto.seasons;
+    }
+
+    public static TvSeriesExtendedDto from(PersistentTvSeries persistentTvSeries, List<TvSeasonDto> tvSeasonDtos) {
+        return new TvSeriesExtendedDto(from(persistentTvSeries))
+                .setSeasons(tvSeasonDtos);
     }
 
     public TvSeriesExtendedDto sortSeasons() {

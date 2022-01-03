@@ -27,6 +27,22 @@ public class TvSeriesDto {
     protected SeriesStatus status;
     protected Set<String> genres;
 
+    public TvSeriesDto(TvSeriesDto tvSeriesDto) {
+        this.id = tvSeriesDto.id;
+        this.name = tvSeriesDto.name;
+        this.firstAirDate = tvSeriesDto.firstAirDate;
+        this.originalLanguage = tvSeriesDto.originalLanguage;
+        this.overview = tvSeriesDto.overview;
+        this.posterPath = tvSeriesDto.posterPath;
+        this.popularity = tvSeriesDto.popularity;
+        this.voteAverage = tvSeriesDto.voteAverage;
+        this.voteCount = tvSeriesDto.voteCount;
+        this.numberOfEpisodes = tvSeriesDto.numberOfEpisodes;
+        this.numberOfSeasons = tvSeriesDto.numberOfSeasons;
+        this.status = tvSeriesDto.status;
+        this.genres = tvSeriesDto.genres;
+    }
+
     public static TvSeriesDto from(PersistentTvSeries persistentTvSeries) {
         Set<String> genreNames = persistentTvSeries.getGenres().stream().map(PersistentGenre::getName).collect(Collectors.toSet());
 

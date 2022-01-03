@@ -1,4 +1,5 @@
-<mat-card appMaterialElevation>
+<mat-card appMaterialElevation *ngIf="entity">
+  <app-watchlist-ribbon [entity]="entity"></app-watchlist-ribbon>
   <div class="flex full-width">
     <div class="entity-image-container">
       <img *ngIf="imageSrc !== undefined" [src]="imageSrc ? imageSrc : '/assets/no-image-placeholder.svg'" [ngClass]="{'error-image': !imageSrc}">
@@ -8,7 +9,7 @@
       <span class="description">
         <ng-content select="[description]"></ng-content>
       </span>
-      <p class="overview">{{overview}}</p>
+      <p class="overview">{{entity.overview}}</p>
     </div>
   </div>
 

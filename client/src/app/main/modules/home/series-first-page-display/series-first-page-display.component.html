@@ -6,7 +6,7 @@
       <li *ngFor="let serie of series$ | async" class="serie-card-item">
         <a [routerLink]="['/series', serie.id]">
           <mat-card appMaterialElevation class="serie-card centralize-text">
-            <app-watchlist-ribbon></app-watchlist-ribbon>
+            <app-watchlist-ribbon [entity]="serie"></app-watchlist-ribbon>
             <mat-card-title>{{ serie.name }}</mat-card-title>
             <img class="serie-image centralize-text"
                  [src]="serie.posterPath ? serie.posterPath : '/assets/no-image-placeholder.svg'"

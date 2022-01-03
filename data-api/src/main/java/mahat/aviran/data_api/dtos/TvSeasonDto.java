@@ -21,6 +21,16 @@ public class TvSeasonDto {
     private String posterPath;
     private List<TvEpisodeDto> episodes;
 
+    public TvSeasonDto(TvSeasonDto tvSeasonDto) {
+        this.id = tvSeasonDto.id;
+        this.name = tvSeasonDto.name;
+        this.seasonNumber = tvSeasonDto.seasonNumber;
+        this.airDate = tvSeasonDto.airDate;
+        this.overview = tvSeasonDto.overview;
+        this.posterPath = tvSeasonDto.posterPath;
+        this.episodes = tvSeasonDto.episodes;
+    }
+
     public static TvSeasonDto from(PersistentTvSeason persistentTvSeason, List<TvEpisodeDto> tvEpisodeDtos) {
         return new TvSeasonDto()
                 .setId(persistentTvSeason.getId())

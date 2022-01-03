@@ -1,8 +1,7 @@
 package mahat.aviran.data_api.controller;
 
 import lombok.RequiredArgsConstructor;
-import mahat.aviran.data_api.dtos.TvSeasonDto;
-import mahat.aviran.data_api.dtos.TvSeriesDto;
+import mahat.aviran.data_api.dtos.TvSeriesExtendedDto;
 import mahat.aviran.data_api.services.WatchlistService;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -19,15 +18,9 @@ public class WatchlistController {
 
     private final WatchlistService watchlistService;
 
-    @GetMapping("{username}/series")
+    @GetMapping("{username}")
     @ResponseBody
-    public List<TvSeriesDto> getAllWatchlistSeries(@PathVariable String username) {
-        return this.watchlistService.getAllWatchlistSeries(username);
-    }
-
-    @GetMapping("{username}/series/{seriesId}")
-    @ResponseBody
-    public List<TvSeasonDto> getWatchlistSeasonsAndEpisodesBySeries(@PathVariable String username, @PathVariable String seriesId) {
-        return this.watchlistService.getWatchlistSeasonsAndEpisodesBySeries(username, seriesId);
+    public List<TvSeriesExtendedDto> getUserWatchlist(@PathVariable String username) {
+        return this.watchlistService.getUserWatchlist(username);
     }
 }

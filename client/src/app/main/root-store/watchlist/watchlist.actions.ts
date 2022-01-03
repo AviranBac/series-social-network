@@ -1,24 +1,25 @@
 import {createAction, props} from '@ngrx/store';
-import {TvSeries} from "../../shared/models/tv-series";
-import {TvSeason} from "../../shared/models/tv-season";
+import {WatchlistTvSeasonEntity, WatchlistTvSeriesEntity} from "./watchlist.state";
+import {Dictionary} from "@ngrx/entity";
+import {TvEpisode} from "../../shared/models/tv-episode";
 
-export const loadSeries = createAction(
-  "[Watchlist] Load Series"
+export const loadWatchlist = createAction(
+  "[Watchlist] Load Watchlist"
 );
 
-export const loadSeriesSuccess = createAction(
-  "[Watchlist] Load Series Success",
-  props<{ series: TvSeries[] }>()
+export const loadWatchlistSeriesSuccess = createAction(
+  "[Watchlist] Load Watchlist Series Success",
+  props<{ normalizedSeries: Dictionary<WatchlistTvSeriesEntity> }>()
 );
 
-export const loadSeasons = createAction(
-  "[Watchlist] Load Seasons",
-  props<{ seriesId: string }>()
+export const loadWatchlistSeasonsSuccess = createAction(
+  "[Watchlist] Load Watchlist Seasons Success",
+  props<{ normalizedSeasons: Dictionary<WatchlistTvSeasonEntity> }>()
 );
 
-export const loadSeasonsSuccess = createAction(
-  "[Watchlist] Load Seasons Success",
-  props<{ seasons: TvSeason[] }>()
+export const loadWatchlistEpisodesSuccess = createAction(
+  "[Watchlist] Load Watchlist Episodes Success",
+  props<{ normalizedEpisodes: Dictionary<TvEpisode> }>()
 );
 
 

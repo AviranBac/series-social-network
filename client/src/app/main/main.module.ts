@@ -17,6 +17,6 @@ import {routes} from "./main.routing";
 })
 export class MainModule {
   constructor(private watchlistStore: Store<WatchlistState.State>) {
-    this.watchlistStore.dispatch(WatchlistActions.loadSeries());
+    this.watchlistStore.dispatch(WatchlistActions.loadWatchlist());
   }
 }

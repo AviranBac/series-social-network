@@ -11,18 +11,21 @@ import {MatIconModule} from "@angular/material/icon";
 import {WatchlistFeatureStoreModule} from "../../root-store/watchlist/watchlist-feature-store.module";
 
 @NgModule({
-  declarations: [
-    HomeComponent,
-    SeriesFirstPageDisplayComponent,
-    WatchlistRibbonComponent
-  ],
-  imports: [
-    CommonModule,
-    SharedModule,
-    RouterModule.forChild(routes),
-    MatCardModule,
-    MatIconModule,
-    WatchlistFeatureStoreModule
-  ]
+    declarations: [
+        HomeComponent,
+        SeriesFirstPageDisplayComponent,
+        WatchlistRibbonComponent
+    ],
+    exports: [
+        WatchlistRibbonComponent
+    ],
+    imports: [
+        CommonModule,
+        SharedModule,
+        RouterModule.forChild(routes),
+        MatCardModule,
+        MatIconModule,
+        WatchlistFeatureStoreModule
+    ]
 })
 export class HomeModule { }

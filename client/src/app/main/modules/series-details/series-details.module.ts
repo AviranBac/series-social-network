@@ -10,6 +10,7 @@ import {SeasonDetailsComponent} from './season-details/season-details.component'
 import {MatCardModule} from "@angular/material/card";
 import {EntityCardComponent} from './entity-card/entity-card.component';
 import {SharedModule} from "../../shared/shared.module";
+import {HomeModule} from "../home/home.module";
 
 @NgModule({
   declarations: [
@@ -17,14 +18,15 @@ import {SharedModule} from "../../shared/shared.module";
     SeasonDetailsComponent,
     EntityCardComponent
   ],
-  imports: [
-    CommonModule,
-    RouterModule.forChild(routes),
-    MatIconModule,
-    MatSelectModule,
-    FormsModule,
-    MatCardModule,
-    SharedModule
-  ]
+    imports: [
+        CommonModule,
+        RouterModule.forChild(routes),
+        MatIconModule,
+        MatSelectModule,
+        FormsModule,
+        MatCardModule,
+        SharedModule,
+        HomeModule
+    ]
 })
 export class SeriesDetailsModule { }
