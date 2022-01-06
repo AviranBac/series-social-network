@@ -50,10 +50,8 @@ export class NavBarComponent implements OnDestroy {
       filter(username => !!username),
       map(username => username as string),
       map((username: string) => [
-        { icon: 'account_circle', value: 'Update Your Details', routerLink: '/user/update' },
-        { icon: 'visibility', value: 'Your Watchlist', routerLink: '/watchlist' },
-        { icon: 'people_outline', value: 'Your Following', routerLink: `/follow/${username}/following` },
-        { icon: 'people_outline', value: 'Your Followers', routerLink: `/follow/${username}/followers` }
+        { icon: 'account_circle', value: 'Your Profile', routerLink: `/users/${username}` },
+        { icon: 'account_circle', value: 'Update Your Details', routerLink: '/users/update' }
       ])
     );
   }

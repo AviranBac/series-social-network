@@ -1,18 +1,43 @@
 @import "../../../../../styles/styles";
 
+.table-container {
+  overflow-y: hidden;
+}
+
+.mat-table {
+  width: 70%;
+  max-width: 70%;
+
+  .mat-row {
+    position: relative;
+  }
+
+  .mat-row-link {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    left: 0;
+    top: 0;
+  }
+
+  .mat-header-cell, .mat-cell {
+    margin: .5rem;
+  }
+
+  td.mat-cell {
+    border-bottom-color: rgba(0,0,0,.12);
+  }
+
+  img {
+    margin-top: .4rem;
+  }
+}
+
 .pagination-footer {
   text-align: center;
   margin-top: 1rem;
 }
 
-.mat-table {
-  width: 50%;
-  max-width: 50%;
-
-  .mat-header-cell, .mat-cell {
-    margin: .5rem;
-  }
-}
 
 ::ng-deep {
   pagination-controls .ngx-pagination .current {

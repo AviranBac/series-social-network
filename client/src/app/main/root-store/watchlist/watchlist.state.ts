@@ -1,28 +1,19 @@
-import {WatchlistTvSeries} from "../../shared/models/tv-series";
 import {Dictionary} from "@ngrx/entity";
-import {WatchlistTvSeason} from "../../shared/models/tv-season";
 import {TvEpisode} from "../../shared/models/tv-episode";
+import {
+  NormalizedWatchlist,
+  WatchlistTvSeasonEntity,
+  WatchlistTvSeriesEntity
+} from "../../shared/normalizers/watchlist-normalizer";
 
 export const seriesFeatureKey = 'series';
 export const seasonsFeatureKey = 'seasons';
 export const episodesFeatureKey = 'episodes';
 
-export interface WatchlistTvSeasonEntity extends Omit<WatchlistTvSeason, 'episodes'> {
-  episodes: string[]
-}
-export interface WatchlistTvSeriesEntity extends Omit<WatchlistTvSeries, 'seasons'> {
-  seasons: string[]
-}
-
 export type TvSeriesState = Dictionary<WatchlistTvSeriesEntity>;
 export type TvSeasonState = Dictionary<WatchlistTvSeasonEntity>;
 export type TvEpisodeState = Dictionary<TvEpisode>;
-
-export interface State {
-  [seriesFeatureKey]: TvSeriesState,
-  [seasonsFeatureKey]: TvSeasonState,
-  [episodesFeatureKey]: TvEpisodeState
-}
+export type State = NormalizedWatchlist;
 
 export const seriesInitialState: TvSeriesState = {};
 export const seasonsInitialState: TvSeasonState = {};

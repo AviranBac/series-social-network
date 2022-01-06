@@ -1,7 +1,7 @@
 package mahat.aviran.data_api.controller;
 
 import lombok.RequiredArgsConstructor;
-import mahat.aviran.data_api.dtos.TvSeriesExtendedDto;
+import mahat.aviran.common.entities.dtos.TvSeriesExtendedDto;
 import mahat.aviran.data_api.services.WatchlistService;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;

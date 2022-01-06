@@ -1,0 +1,8 @@
+<app-pagination-table *ngIf="username$ | async"
+                      paginationId="following"
+                      [itemsPerPage]="itemsPerPage"
+                      [columnDetails]="columnDetails"
+                      [requestFn]="getRequestFn()"
+                      [routerLinkExtractor]="getUserDetailsRoute">
+  <span noDataBody>You have 0 following.</span>
+</app-pagination-table>

@@ -61,7 +61,7 @@ export class TvSeriesService {
   loadMostWatchedSeries(page: number, sort: Sort): Observable<Page<TvSeries>> {
     const params = {
       page: page - 1,
-      sort: sort
+      sort
     };
 
     return this.http.get<Page<TvSeries>>(`${environment.apiGatewayUrl}/data/series/watched`, { params }).pipe(

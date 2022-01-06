@@ -6,16 +6,15 @@ export const routes: Routes = [
     loadChildren: () => import('./modules/home/home.module').then(m => m.HomeModule)
   },
   {
-    path: 'watchlist',
-    loadChildren: () => import('./modules/watchlist/watchlist.module').then(m => m.WatchlistModule)
+    path: 'users',
+    loadChildren: () => import('./modules/users/users.module').then(m => m.UsersModule)
   },
   {
-    path: 'follow',
-    loadChildren: () => import('./modules/follow/follow.module').then(m => m.FollowModule)
-  },
-  {
-
     path: 'series',
     loadChildren: () => import('./modules/series-details/series-details.module').then(m => m.SeriesDetailsModule)
+  },
+  {
+    path: 'statistics',
+    loadChildren: () => import('./modules/statistics/statistics.module').then(m => m.StatisticsModule)
   }
 ];

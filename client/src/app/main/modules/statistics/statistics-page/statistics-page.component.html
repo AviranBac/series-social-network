@@ -1,0 +1,16 @@
+<h1 class="page-title">Statistics</h1>
+
+<mat-tab-group animationDuration="1000ms" mat-align-tabs="center">
+  <mat-tab *ngFor="let tab of tabsAndRequestFn" [label]="tab.label">
+    <ng-template matTabContent>
+      <app-pagination-table [requestFn]="tab.requestFn"
+                            [paginationId]="tab.label"
+                            [itemsPerPage]="10"
+                            [columnDetails]="tab.columnDetails"
+                            [imageSrcExtractor]="tab.imageSrcExtractor"
+                            [routerLinkExtractor]="tab.routerLinkExtractor">
+        <span noDataBody>There are no records.</span>
+      </app-pagination-table>
+    </ng-template>
+  </mat-tab>
+</mat-tab-group>

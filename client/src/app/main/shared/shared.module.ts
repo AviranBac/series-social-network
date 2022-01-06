@@ -12,16 +12,20 @@ import {PaginationTableComponent} from './components/pagination-table/pagination
 import {MatTableModule} from "@angular/material/table";
 import {NgxPaginationModule} from "ngx-pagination";
 import {MaterialElevationDirective} from "./directives/material-elevation.directive";
+import {WatchlistRibbonComponent} from "./components/watchlist-ribbon/watchlist-ribbon.component";
+import {WatchlistFeatureStoreModule} from "../root-store/watchlist/watchlist-feature-store.module";
 
 @NgModule({
   declarations: [
     NavBarComponent,
     PaginationTableComponent,
-    MaterialElevationDirective
+    MaterialElevationDirective,
+    WatchlistRibbonComponent
   ],
   exports: [
     NavBarComponent,
     PaginationTableComponent,
+    WatchlistRibbonComponent,
     MaterialElevationDirective
   ],
   imports: [
@@ -34,7 +38,8 @@ import {MaterialElevationDirective} from "./directives/material-elevation.direct
     MatSidenavModule,
     RouterModule,
     MatTableModule,
-    NgxPaginationModule
+    NgxPaginationModule,
+    WatchlistFeatureStoreModule
   ]
 })
 export class SharedModule { }

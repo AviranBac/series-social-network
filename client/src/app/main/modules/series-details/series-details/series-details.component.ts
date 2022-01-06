@@ -21,9 +21,7 @@ export class SeriesDetailsComponent {
 
   constructor(private routerStore: Store<RouterState>,
               private tvSeriesService: TvSeriesService) {
-    this.tvSeries$ = this.routerStore.select(RouterSelectors.selectRouteParam('seriesId')).pipe(
-      filter(seriesId => !!seriesId),
-      map(seriesId => seriesId as string),
+    this.tvSeries$ = this.routerStore.select(RouterSelectors.selectCurrentSeriesId).pipe(
       switchMap(seriesId => this.tvSeriesService.loadSeriesDetails(seriesId))
     );
 

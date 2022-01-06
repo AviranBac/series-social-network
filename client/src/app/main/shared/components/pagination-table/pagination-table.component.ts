@@ -17,9 +17,12 @@ export class PaginationTableComponent<T> implements OnInit {
   @Input() itemsPerPage: number;
   @Input() columnDetails: ColumnDetails[];
   @Input() requestFn: (page: number) => Observable<Page<T>>;
+  @Input() imageSrcExtractor?: (entity: T) => string;
+  @Input() routerLinkExtractor?: (entity: T) => string;
 
   dataSource$: Observable<T[]>;
   positionColumn = 'position';
+  imageColumn = 'image';
   displayedColumns: string[] = [this.positionColumn];
   currentDisplayedPage: number = 1;
   totalItems: number;
@@ -29,10 +32,12 @@ export class PaginationTableComponent<T> implements OnInit {
   constructor() { }
 
   ngOnInit(): void {
+    this.displayedColumns = this.imageSrcExtractor ? [ ...this.displayedColumns, this.imageColumn ] : this.displayedColumns;
     this.displayedColumns = [
       ...this.displayedColumns,
       ...this.columnDetails.map(details => details.field)
     ];
+
     this.getPage(1);
   }
 

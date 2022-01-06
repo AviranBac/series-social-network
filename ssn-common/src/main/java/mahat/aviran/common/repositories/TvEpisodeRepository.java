@@ -28,4 +28,14 @@ public interface TvEpisodeRepository extends JpaRepository<PersistentTvEpisode, 
                    "      tv_seasons.series_id=tv_series.id",
             nativeQuery = true)
     List<PersistentTvEpisode> getWatchlistEpisodes(String username);
+
+    @Query(value = "SELECT tv_episodes.* " +
+            "FROM tv_series, tv_seasons, tv_episodes, watchlist_records " +
+            "WHERE watchlist_records.user_name=?1 AND " +
+            "      watchlist_records.episode_id=tv_episodes.id AND " +
+            "      tv_episodes.season_id=tv_seasons.id AND " +
+            "      tv_seasons.series_id=tv_series.id AND " +
+            "      tv_series.id IN ?2",
+            nativeQuery = true)
+    List<PersistentTvEpisode> getWatchlistEpisodesBySeriesId(String username, Set<String> seriesId);
 }

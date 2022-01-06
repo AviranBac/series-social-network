@@ -4,6 +4,7 @@ import {User} from "../../main/shared/models/user";
 import {environment} from "../../../environments/environment";
 import {Page} from "../../main/shared/models/page";
 import {Observable} from "rxjs";
+import {Sort} from "../../main/shared/models/sort";
 
 @Injectable({
   providedIn: 'root'
@@ -11,6 +12,15 @@ import {Observable} from "rxjs";
 export class FollowService {
 
   constructor(private http: HttpClient) { }
+
+  loadMostFollowedUsers(page: number, sort: Sort): Observable<Page<User>> {
+    const params = {
+      page: page - 1,
+      sort
+    };
+
+    return this.http.get<Page<User>>(`${environment.apiGatewayUrl}/data/users/followed`, { params });
+  }
 
   loadFollowing(username: string, page: number): Observable<Page<User>> {
     const params = {
