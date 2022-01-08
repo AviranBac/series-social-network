@@ -25,7 +25,7 @@ export class UserFollowersComponent {
 
   getRequestFn(): (page: number) => Observable<Page<User>> {
     return (page: number) => this.username$.pipe(
-      switchMap(username => this.followService.loadFollowing(username, page))
+      switchMap(username => this.followService.loadFollowers(username, page))
     );
   }
 

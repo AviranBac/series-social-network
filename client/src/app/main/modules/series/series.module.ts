@@ -2,7 +2,7 @@ import {NgModule} from '@angular/core';
 import {CommonModule} from '@angular/common';
 import {SeriesDetailsComponent} from './series-details/series-details.component';
 import {RouterModule} from "@angular/router";
-import {routes} from "./serie-details.routing";
+import {routes} from "./series.routing";
 import {MatIconModule} from "@angular/material/icon";
 import {MatSelectModule} from "@angular/material/select";
 import {FormsModule} from "@angular/forms";
@@ -29,4 +29,4 @@ import {HomeModule} from "../home/home.module";
         HomeModule
     ]
 })
-export class SeriesDetailsModule { }
+export class SeriesModule { }

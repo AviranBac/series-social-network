@@ -11,7 +11,7 @@ export const routes: Routes = [
   },
   {
     path: 'series',
-    loadChildren: () => import('./modules/series-details/series-details.module').then(m => m.SeriesDetailsModule)
+    loadChildren: () => import('./modules/series/series.module').then(m => m.SeriesModule)
   },
   {
     path: 'statistics',
