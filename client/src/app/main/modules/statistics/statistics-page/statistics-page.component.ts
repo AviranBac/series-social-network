@@ -1,5 +1,5 @@
 import {Component} from '@angular/core';
-import {Observable} from "rxjs";
+import {Observable, of} from "rxjs";
 import {Page} from "../../../shared/models/page";
 import {TvSeries} from "../../../shared/models/tv-series";
 import {FollowService} from "../../../../core/services/follow.service";
@@ -9,7 +9,7 @@ import {ColumnDetails} from "../../../shared/components/pagination-table/paginat
 
 interface TabsAndRequestFn<T> {
   label: string,
-  requestFn: (page: number) => Observable<Page<T>>,
+  requestFn$: Observable<(page: number) => Observable<Page<T>>>,
   columnDetails: ColumnDetails[]
   imageSrcExtractor?: (entity: T) => string
   routerLinkExtractor?: (entity: T) => string
@@ -39,31 +39,31 @@ export class StatisticsPageComponent {
     this.tabsAndRequestFn = [
       {
         label: 'Most Watched Series',
-        requestFn: page => this.tvSeriesService.loadMostWatchedSeries(page, 'DESC'),
+        requestFn$: of(page => this.tvSeriesService.loadMostWatchedSeries(page, 'DESC')),
         columnDetails: seriesColumnDetails,
         imageSrcExtractor: seriesImageSrcExtractor,
         routerLinkExtractor: seriesRouterLinkExtractor
       },
       { label: 'Least Watched Series',
-        requestFn: page => this.tvSeriesService.loadMostWatchedSeries(page, 'ASC'),
+        requestFn$: of(page => this.tvSeriesService.loadMostWatchedSeries(page, 'ASC')),
         columnDetails: seriesColumnDetails,
         imageSrcExtractor: seriesImageSrcExtractor,
         routerLinkExtractor: seriesRouterLinkExtractor
       },
       { label: 'Top Rated Series',
-        requestFn: page => this.tvSeriesService.loadTopRatedSeries(page),
+        requestFn$: of(page => this.tvSeriesService.loadTopRatedSeries(page)),
         columnDetails: seriesColumnDetails,
         imageSrcExtractor: seriesImageSrcExtractor,
         routerLinkExtractor: seriesRouterLinkExtractor
       },
       { label: 'Most Popular Series',
-        requestFn: page => this.tvSeriesService.loadMostPopularSeries(page),
+        requestFn$: of(page => this.tvSeriesService.loadMostPopularSeries(page)),
         columnDetails: seriesColumnDetails,
         imageSrcExtractor: seriesImageSrcExtractor,
         routerLinkExtractor: seriesRouterLinkExtractor
       },
       { label: 'Most Followed Users',
-        requestFn: page => this.followService.loadMostFollowedUsers(page, 'DESC'),
+        requestFn$: of(page => this.followService.loadMostFollowedUsers(page, 'DESC')),
         columnDetails: [
           {field: 'userName', label: 'User Name'},
           {field: 'firstName', label: 'First Name'},

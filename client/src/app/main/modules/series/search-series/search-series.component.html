@@ -1,0 +1,50 @@
+<h1 class="page-title">Search Series</h1>
+
+<div class="container flex-column">
+  <mat-sidenav-container class="sidenav-container" [hasBackdrop]="false">
+    <mat-sidenav #snav mode="side" [fixedInViewport]="true" opened [disableClose]="true" autosize>
+      <form *ngIf="form" [formGroup]="form">
+        <span>Filters:</span>
+
+        <section class="text-section">
+          Name: <input type="text" formControlName="name">
+        </section>
+
+        <section class="checkbox-section" *ngIf="(seriesStatuses$ | async) as seriesStatuses">
+          Series Statuses:
+          <ul class="checkbox-list-section" formArrayName="seriesStatuses">
+            <li *ngFor="let seriesStatus of seriesStatuses; index as index">
+              <mat-checkbox [formControlName]="index"
+                            color="primary">
+                {{getSeriesStatusValue(seriesStatus)}}
+              </mat-checkbox>
+            </li>
+          </ul>
+        </section>
+
+        <section class="checkbox-section" *ngIf="(genres$ | async) as genres">
+          Genres:
+          <ul class="checkbox-list-section" formArrayName="genres">
+            <li *ngFor="let genre of genres; index as index">
+              <mat-checkbox [formControlName]="index"
+                            color="primary">
+                {{genre.name}}
+              </mat-checkbox>
+            </li>
+          </ul>
+        </section>
+      </form>
+    </mat-sidenav>
+
+    <mat-sidenav-content>
+      <app-pagination-table [requestFn$]="requestFn$"
+                            paginationId="search-series"
+                            [itemsPerPage]="10"
+                            [columnDetails]="seriesColumnDetails"
+                            [imageSrcExtractor]="seriesImageSrcExtractor"
+                            [routerLinkExtractor]="seriesRouterLinkExtractor">
+        <span noDataBody>There are no series matching your filters.</span>
+      </app-pagination-table>
+    </mat-sidenav-content>
+  </mat-sidenav-container>
+</div>

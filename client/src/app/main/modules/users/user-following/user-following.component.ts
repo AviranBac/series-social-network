@@ -1,5 +1,5 @@
 import {Component, Input} from '@angular/core';
-import {Observable, switchMap} from 'rxjs';
+import {Observable, of, switchMap} from 'rxjs';
 import {FollowService} from "../../../../core/services/follow.service";
 import {User} from "../../../shared/models/user";
 import {Page} from "../../../shared/models/page";
@@ -23,10 +23,10 @@ export class UserFollowingComponent {
 
   constructor(private followService: FollowService) {}
 
-  getRequestFn(): (page: number) => Observable<Page<User>> {
-    return (page: number) => this.username$.pipe(
+  getRequestFn(): Observable<(page: number) => Observable<Page<User>>> {
+    return of((page: number) => this.username$.pipe(
       switchMap(username => this.followService.loadFollowing(username, page))
-    );
+    ));
   }
 
   getUserDetailsRoute(user: User) {

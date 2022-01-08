@@ -5,6 +5,19 @@ import {Page} from "../../main/shared/models/page";
 import {environment} from "../../../environments/environment";
 import {ExtendedTvSeries, TvSeries} from "../../main/shared/models/tv-series";
 import {Sort} from "../../main/shared/models/sort";
+import {SeriesStatus} from "../../main/shared/models/series-status";
+import {TvGenre} from "../../main/shared/models/genre";
+
+export interface SeriesFilterOptions {
+  seriesStatuses: SeriesStatus[],
+  genres: TvGenre[]
+}
+
+export interface RequestedSeriesFilter {
+  name: string,
+  seriesStatuses: SeriesStatus[],
+  genreIds: number[]
+}
 
 @Injectable({
   providedIn: 'root'
@@ -12,6 +25,23 @@ import {Sort} from "../../main/shared/models/sort";
 export class TvSeriesService {
 
   constructor(private http: HttpClient) { }
+
+  loadSeriesFilterOptions(): Observable<SeriesFilterOptions> {
+    return this.http.get<SeriesFilterOptions>(`${environment.apiGatewayUrl}/data/series/filters`);
+  }
+
+  loadSeriesByFilter(page: number, requestSeriesFilter: RequestedSeriesFilter): Observable<Page<TvSeries>> {
+    const params = {
+      page: page - 1,
+      name: requestSeriesFilter.name,
+      seriesStatus: requestSeriesFilter.seriesStatuses,
+      genreId: requestSeriesFilter.genreIds
+    };
+
+    return this.http.get<Page<TvSeries>>(`${environment.apiGatewayUrl}/data/series`, { params }).pipe(
+      map(this.applyDiscriminatorsToPage)
+    );
+  }
 
   loadSeriesDetails(seriesId: string): Observable<ExtendedTvSeries> {
     return this.http.get<ExtendedTvSeries>(`${environment.apiGatewayUrl}/data/series/${seriesId}`).pipe(
@@ -25,10 +55,7 @@ export class TvSeriesService {
     };
 
     return this.http.get<Page<TvSeries>>(`${environment.apiGatewayUrl}/data/series/popular`, { params }).pipe(
-      map(page => ({
-        ...page,
-        content: page.content.map(series => ({ ...series, discriminator: 'series' }))
-      }))
+      map(this.applyDiscriminatorsToPage)
     );
   }
 
@@ -38,11 +65,8 @@ export class TvSeriesService {
     };
 
     return this.http.get<Page<TvSeries>>(`${environment.apiGatewayUrl}/data/series/topRated`, { params }).pipe(
-      map(page => ({
-        ...page,
-        content: page.content.map(series => ({ ...series, discriminator: 'series' }))
-      }))
-    );;
+      map(this.applyDiscriminatorsToPage)
+    );
   }
 
   loadCommonSeriesAmongFollowing(username: string, page: number): Observable<Page<TvSeries>> {
@@ -51,10 +75,7 @@ export class TvSeriesService {
     };
 
     return this.http.get<Page<TvSeries>>(`${environment.apiGatewayUrl}/data/series/commonAmongFollowing/${username}`, { params }).pipe(
-      map(page => ({
-        ...page,
-        content: page.content.map(series => ({ ...series, discriminator: 'series' }))
-      }))
+      map(this.applyDiscriminatorsToPage)
     );
   }
 
@@ -65,11 +86,15 @@ export class TvSeriesService {
     };
 
     return this.http.get<Page<TvSeries>>(`${environment.apiGatewayUrl}/data/series/watched`, { params }).pipe(
-      map(page => ({
-        ...page,
-        content: page.content.map(series => ({ ...series, discriminator: 'series' }))
-      }))
+      map(this.applyDiscriminatorsToPage)
     );
+  }
+
+  private applyDiscriminatorsToPage(seriesPage: Page<TvSeries>): Page<TvSeries> {
+    return {
+      ...seriesPage,
+      content: seriesPage.content.map(series => ({ ...series, discriminator: 'series' }))
+    };
   }
 
   private applyDiscriminators(extendedTvSeries: ExtendedTvSeries): ExtendedTvSeries {

@@ -2,7 +2,7 @@
                       paginationId="followers"
                       [itemsPerPage]="itemsPerPage"
                       [columnDetails]="columnDetails"
-                      [requestFn]="getRequestFn()"
+                      [requestFn$]="getRequestFn()"
                       [routerLinkExtractor]="getUserDetailsRoute">
   <span noDataBody>You have 0 followers.</span>
 </app-pagination-table>

@@ -1,7 +1,7 @@
 import {Component, Input} from '@angular/core';
 import {ColumnDetails} from "../../../shared/components/pagination-table/pagination-table.component";
 import {FollowService} from "../../../../core/services/follow.service";
-import {Observable, switchMap} from "rxjs";
+import {Observable, of, switchMap} from "rxjs";
 import {Page} from "../../../shared/models/page";
 import {User} from "../../../shared/models/user";
 
@@ -23,10 +23,10 @@ export class UserFollowersComponent {
 
   constructor(private followService: FollowService) {}
 
-  getRequestFn(): (page: number) => Observable<Page<User>> {
-    return (page: number) => this.username$.pipe(
+  getRequestFn(): Observable<(page: number) => Observable<Page<User>>> {
+    return of((page: number) => this.username$.pipe(
       switchMap(username => this.followService.loadFollowers(username, page))
-    );
+    ));
   }
 
   getUserDetailsRoute(user: User) {

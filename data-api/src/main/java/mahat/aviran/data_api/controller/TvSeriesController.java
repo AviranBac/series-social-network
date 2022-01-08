@@ -5,6 +5,7 @@ import mahat.aviran.common.entities.SeriesStatus;
 import mahat.aviran.common.entities.dtos.TvSeriesDto;
 import mahat.aviran.common.entities.dtos.TvSeriesExtendedDto;
 import mahat.aviran.data_api.dtos.PageDto;
+import mahat.aviran.data_api.dtos.SeriesFilterOptionsDto;
 import mahat.aviran.data_api.services.TvSeriesService;
 import org.springframework.data.domain.Sort;
 import org.springframework.http.ResponseEntity;
@@ -28,6 +29,12 @@ public class TvSeriesController {
                                                   @RequestParam(required = false, defaultValue = "") Set<SeriesStatus> seriesStatus,
                                                   @RequestParam(required = false, defaultValue = "") Set<Integer> genreId) {
         return tvSeriesService.getSeriesByFilter(page, name, seriesStatus, genreId);
+    }
+
+    @GetMapping("filters")
+    @ResponseBody
+    public SeriesFilterOptionsDto getSeriesFilterOptions() {
+        return tvSeriesService.getSeriesFilterOptions();
     }
 
     @GetMapping("{seriesId}")

@@ -25,7 +25,7 @@ export class NavBarComponent implements OnDestroy {
 
   sideNavOptions: MenuOptions[] = [
     { icon: 'home', value: 'Home', routerLink: '/' },
-    { icon: 'tv', value: 'Search Series', routerLink: '/series' },
+    { icon: 'tv', value: 'Search Series', routerLink: '/series/search' },
     { icon: 'person', value: 'Search Network', routerLink: '/network' },
     { icon: 'poll', value: 'Statistics', routerLink: '/statistics' },
   ];

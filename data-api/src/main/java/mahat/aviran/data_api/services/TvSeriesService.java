@@ -8,14 +8,13 @@ import mahat.aviran.common.entities.dtos.TvEpisodeDto;
 import mahat.aviran.common.entities.dtos.TvSeasonDto;
 import mahat.aviran.common.entities.dtos.TvSeriesDto;
 import mahat.aviran.common.entities.dtos.TvSeriesExtendedDto;
+import mahat.aviran.common.entities.persistence.PersistentGenre;
 import mahat.aviran.common.entities.persistence.PersistentTvSeason;
 import mahat.aviran.common.entities.persistence.PersistentTvSeries;
 import mahat.aviran.common.entities.persistence.PersistentUser;
-import mahat.aviran.common.repositories.FollowRepository;
-import mahat.aviran.common.repositories.TvEpisodeRepository;
-import mahat.aviran.common.repositories.TvSeasonRepository;
-import mahat.aviran.common.repositories.TvSeriesRepository;
+import mahat.aviran.common.repositories.*;
 import mahat.aviran.data_api.dtos.PageDto;
+import mahat.aviran.data_api.dtos.SeriesFilterOptionsDto;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
@@ -39,6 +38,7 @@ public class TvSeriesService {
     private final TvSeasonRepository tvSeasonRepository;
     private final TvEpisodeRepository tvEpisodeRepository;
     private final FollowRepository followRepository;
+    private final GenreRepository genreRepository;
     private final int PAGE_SIZE = 10;
 
     @Transactional
@@ -55,6 +55,12 @@ public class TvSeriesService {
                 .map(TvSeriesDto::from);
 
         return PageDto.from(pageResult);
+    }
+
+    @Transactional
+    public SeriesFilterOptionsDto getSeriesFilterOptions() {
+        List<PersistentGenre> genres = this.genreRepository.findAll();
+        return new SeriesFilterOptionsDto(genres);
     }
 
     @Transactional

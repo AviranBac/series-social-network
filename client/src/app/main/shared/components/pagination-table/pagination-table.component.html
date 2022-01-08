@@ -32,5 +32,7 @@
 
 <div class="pagination-footer">
   <pagination-controls [id]="paginationId"
-                       (pageChange)="getPage($event)"></pagination-controls>
+                       (pageChange)="this.pageChange$.next($event)"
+                       (pageBoundsCorrection)="this.pageChange$.next($event)">
+  </pagination-controls>
 </div>

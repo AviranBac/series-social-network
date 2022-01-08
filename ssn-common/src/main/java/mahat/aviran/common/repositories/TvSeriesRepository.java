@@ -57,6 +57,9 @@ public interface TvSeriesRepository extends JpaRepository<PersistentTvSeries, St
     }
 
     static Specification<PersistentTvSeries> genreIdIn(Collection<Integer> genreIdCriteria) {
-        return (tvSeries, criteriaQuery, criteriaBuilder) ->  tvSeries.join("genres").in(genreIdCriteria);
+        return (tvSeries, criteriaQuery, criteriaBuilder) -> {
+            criteriaQuery.distinct(true);
+            return tvSeries.join("genres").in(genreIdCriteria);
+        };
     }
 }
