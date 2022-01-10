@@ -1,32 +1,41 @@
 <div class="user-container"*ngIf="user$ | async as user">
   <h1 class="page-title">{{user.userName}}</h1>
 
-  <div class="details centralize-grid centralize-text">
+  <section class="follow-section centralize-text">
+    <button mat-raised-button
+            *ngIf="!(isLoggedUser$ | async)"
+            color='primary'
+            (click)="updateFollow()">
+      {{(isFollowing$ | async) ? 'Unfollow' : 'Follow'}}
+    </button>
+  </section>
+
+  <section class="details-section centralize-grid centralize-text">
     <span class="header">First Name:</span>
     {{user.firstName}}
     <span class="header">Last Name:</span>
     {{user.lastName}}
-  </div>
+  </section>
 
   <mat-tab-group animationDuration="1000ms" mat-align-tabs="center">
     <mat-tab label="Watchlist">
       <ng-template matTabContent>
         <app-watchlist [username$]="username$"
-                       [isCurrentUser$]="isCurrentUser$"></app-watchlist>
+                       [isCurrentUser$]="isLoggedUser$"></app-watchlist>
       </ng-template>
     </mat-tab>
 
     <mat-tab label="Following">
       <ng-template matTabContent>
         <app-user-following [username$]="username$"
-                            [isCurrentUser$]="isCurrentUser$">></app-user-following>
+                            [isCurrentUser$]="isLoggedUser$">></app-user-following>
       </ng-template>
     </mat-tab>
 
     <mat-tab label="Followers">
       <ng-template matTabContent>
         <app-user-followers [username$]="username$"
-                            [isCurrentUser$]="isCurrentUser$"></app-user-followers>
+                            [isCurrentUser$]="isLoggedUser$"></app-user-followers>
       </ng-template>
     </mat-tab>
   </mat-tab-group>

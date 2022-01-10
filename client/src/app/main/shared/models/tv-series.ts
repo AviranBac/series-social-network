@@ -31,3 +31,11 @@ export interface WatchlistTvSeries extends TvSeries {
 export function isSeries(object: any): object is WatchlistTvSeries {
   return object.discriminator === 'series';
 }
+
+export function extractSeriesImageSrc(series: TvSeries) {
+  return series.posterPath;
+}
+
+export function extractSeriesRouterLink(series: TvSeries) {
+  return `/series/${series.id}`;
+}

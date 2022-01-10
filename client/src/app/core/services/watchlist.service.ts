@@ -37,7 +37,7 @@ export class WatchlistService {
               private watchlistStore: Store<WatchlistState.State>,
               private userStore: Store<UserState.State>) { }
 
-  getWatchlistSeries(username: string): Observable<WatchlistTvSeries[]> {
+  loadWatchlistSeries(username: string): Observable<WatchlistTvSeries[]> {
     return this.http.get<WatchlistTvSeries[]>(`${environment.apiGatewayUrl}/data/watchlist/${username}`);
   }
 

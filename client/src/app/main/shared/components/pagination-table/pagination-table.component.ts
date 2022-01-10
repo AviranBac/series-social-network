@@ -1,11 +1,25 @@
 import {Component, Input, OnInit} from '@angular/core';
-import {BehaviorSubject, combineLatest, map, Observable, Subject, switchMap, tap} from "rxjs";
+import {BehaviorSubject, combineLatest, map, Observable, Subject, switchMap, take, tap} from "rxjs";
 import {Page} from "../../models/page";
 
 export interface ColumnDetails {
   field: string
   label: string
 }
+
+export const userColumnDetails: ColumnDetails[] = [
+  {field: 'userName', label: 'User Name'},
+  {field: 'firstName', label: 'First Name'},
+  {field: 'lastName', label: 'Last Name'}
+];
+
+export const seriesColumnDetails: ColumnDetails[] = [
+  { field: 'name', label: 'Name' },
+  { field: 'numberOfEpisodes', label: 'Number of Episodes' },
+  { field: 'numberOfSeasons', label: 'Number of Seasons' },
+  { field: 'status', label: 'Series Status' },
+  { field: 'genres', label: 'Genres' }
+];
 
 @Component({
   selector: 'app-pagination-table',
@@ -16,7 +30,7 @@ export class PaginationTableComponent<T> implements OnInit {
   @Input() paginationId: string;
   @Input() itemsPerPage: number;
   @Input() columnDetails: ColumnDetails[];
-  @Input() requestFn$: Observable<(page: number) => Observable<Page<T>>>;
+  @Input() loadRequestFn$: Observable<(page: number) => Observable<Page<T>>>;
   @Input() imageSrcExtractor?: (entity: T) => string;
   @Input() routerLinkExtractor?: (entity: T) => string;
 
@@ -47,7 +61,8 @@ export class PaginationTableComponent<T> implements OnInit {
   }
 
   handlePageRequests(): void {
-    this.dataSource$ = combineLatest([this.requestFn$, this.pageChange$]).pipe(
+    // TODO: Handle remove request fn (e.g. remove following)
+    this.dataSource$ = combineLatest([this.loadRequestFn$, this.pageChange$]).pipe(
       tap(() => this.loading = true),
       switchMap(([requestFn, page]) => requestFn(page).pipe(
         tap((response: Page<T>) => {

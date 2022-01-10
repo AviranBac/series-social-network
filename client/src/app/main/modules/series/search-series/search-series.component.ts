@@ -1,11 +1,25 @@
 import {Component, OnInit} from '@angular/core';
 import {RequestedSeriesFilter, TvSeriesService} from "../../../../core/services/tv-series.service";
-import {combineLatest, map, Observable, shareReplay, Subject, switchMap, take, takeUntil, tap} from "rxjs";
+import {
+  combineLatest,
+  debounceTime,
+  map,
+  Observable,
+  shareReplay,
+  Subject,
+  switchMap,
+  take,
+  takeUntil,
+  tap
+} from "rxjs";
 import {getStatusValue, SeriesStatus} from "../../../shared/models/series-status";
 import {FormArray, FormBuilder, FormControl, FormGroup} from "@angular/forms";
 import {TvGenre} from "../../../shared/models/genre";
-import {TvSeries} from "../../../shared/models/tv-series";
-import {ColumnDetails} from "../../../shared/components/pagination-table/pagination-table.component";
+import {extractSeriesImageSrc, extractSeriesRouterLink, TvSeries} from "../../../shared/models/tv-series";
+import {
+  ColumnDetails,
+  seriesColumnDetails
+} from "../../../shared/components/pagination-table/pagination-table.component";
 import {Page} from "../../../shared/models/page";
 import {Destroyable} from "../../../shared/utils/destroyable.utils";
 
@@ -18,15 +32,9 @@ export class SearchSeriesComponent extends Destroyable implements OnInit {
   form: FormGroup;
   seriesStatuses$: Observable<SeriesStatus[]>;
   genres$: Observable<TvGenre[]>;
-  seriesImageSrcExtractor = (tvSeries: TvSeries) => tvSeries.posterPath;
-  seriesRouterLinkExtractor = (tvSeries: TvSeries) => `/series/${tvSeries.id}`;
-  seriesColumnDetails: ColumnDetails[] = [
-    { field: 'name', label: 'Name' },
-    { field: 'numberOfEpisodes', label: 'Number of Episodes' },
-    { field: 'numberOfSeasons', label: 'Number of Seasons' },
-    { field: 'status', label: 'Series Status' },
-    { field: 'genres', label: 'Genres' }
-  ];
+  seriesImageSrcExtractor: (tvSeries: TvSeries) => string = extractSeriesImageSrc;
+  seriesRouterLinkExtractor: (tvSeries: TvSeries) => string = extractSeriesRouterLink;
+  seriesColumnDetails: ColumnDetails[] = seriesColumnDetails;
   requestFn$: Observable<(page: number) => Observable<Page<TvSeries>>>;
 
   private seriesFilters$: Subject<RequestedSeriesFilter> = new Subject<RequestedSeriesFilter>();
@@ -63,12 +71,12 @@ export class SearchSeriesComponent extends Destroyable implements OnInit {
       take(1),
       tap(() => this.updateRequestedSeriesFilter(this.form.value)),
       switchMap(() => this.form.valueChanges),
+      debounceTime(500),
       takeUntil(this.destroy$)
     ).subscribe(changes => this.updateRequestedSeriesFilter(changes));
 
     this.requestFn$ = this.seriesFilters$.pipe(
-      map(requestedSeriesFilter => (page: number) => this.tvSeriesService.loadSeriesByFilter(page, requestedSeriesFilter)),
-      shareReplay(),
+      map((requestedSeriesFilter: RequestedSeriesFilter) => (page: number) => this.tvSeriesService.loadSeriesByFilter(page, requestedSeriesFilter)),
       takeUntil(this.destroy$)
     );
   }

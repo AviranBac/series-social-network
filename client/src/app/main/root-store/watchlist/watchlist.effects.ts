@@ -29,7 +29,7 @@ export class WatchlistEffects {
     this.actions$.pipe(
       ofType(loadWatchlist),
       withLatestFrom(this.selectUsername()),
-      switchMap(([action, username]) => this.watchlistService.getWatchlistSeries(username).pipe(
+      switchMap(([action, username]) => this.watchlistService.loadWatchlistSeries(username).pipe(
         map((series: WatchlistTvSeries[]) => upsertWatchlistSuccess({ series }))
       ))
     )

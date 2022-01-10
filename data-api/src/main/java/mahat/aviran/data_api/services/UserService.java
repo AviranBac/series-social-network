@@ -70,6 +70,14 @@ public class UserService {
                 .map(PageDto::from);
     }
 
+    public Optional<Boolean> isFollowing(String followingUsername, String followedUsername) {
+        if (!this.userRepository.existsById(followingUsername) || !this.userRepository.existsById(followedUsername)) {
+            return Optional.empty();
+        }
+
+        return Optional.of(Optional.ofNullable(this.followRepository.findFollow(followingUsername, followedUsername)).isPresent());
+    }
+
     public PageDto<UserDto> getFollowedUsers(int page, Sort.Direction direction) {
         Page<UserDto> sortedFollowedUsers = this.userRepository.findFollowedUsers(
                 PageRequest.of(page, PAGE_SIZE, Sort.by(direction, "followed_users.count"))

@@ -50,7 +50,7 @@ export class WatchlistContainerComponent implements OnInit {
     this.watchlist$ = this.isCurrentUser$.pipe(
       filter(isCurrentUser => !isCurrentUser),
       switchMap(() => this.username$.pipe(
-        switchMap(username => this.watchlistService.getWatchlistSeries(username).pipe(
+        switchMap(username => this.watchlistService.loadWatchlistSeries(username).pipe(
           map((series: WatchlistTvSeries[]) => normalizeWatchlistSeries(series)),
           shareReplay()
         ))

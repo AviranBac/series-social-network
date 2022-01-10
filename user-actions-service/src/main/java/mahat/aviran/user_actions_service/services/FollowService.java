@@ -54,11 +54,11 @@ public class FollowService {
     }
 
     private void validateUserInput(String usernameFrom, String usernameTo) {
-        if (this.userRepository.existsById(usernameFrom)) {
+        if (!this.userRepository.existsById(usernameFrom)) {
             throw new UsernameFromNotFoundException();
         }
 
-        if (this.userRepository.existsById(usernameTo)) {
+        if (!this.userRepository.existsById(usernameTo)) {
             throw new UsernameToNotFoundException();
         }
     }

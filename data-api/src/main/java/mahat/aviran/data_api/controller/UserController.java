@@ -61,6 +61,15 @@ public class UserController {
                 .orElseGet(() -> ResponseEntity.badRequest().body("Username " + username + " does not exist"));
     }
 
+    @GetMapping("{followingUsername}/following/{followedUsername}")
+    public ResponseEntity<Object> getUserFollowing(@PathVariable String followingUsername, @PathVariable String followedUsername) {
+        Optional<Boolean> isFollowing = userService.isFollowing(followingUsername, followedUsername);
+
+        return isFollowing.
+                <ResponseEntity<Object>> map(ResponseEntity::ok)
+                .orElseGet(() -> ResponseEntity.badRequest().body("Username " + followingUsername + " or username " + followedUsername + " does not exist"));
+    }
+
     @GetMapping("followed")
     @ResponseBody
     public PageDto<UserDto> getFollowedUsers(@RequestParam int page, @RequestParam Sort.Direction sort) {

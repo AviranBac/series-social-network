@@ -37,7 +37,7 @@
     </mat-sidenav>
 
     <mat-sidenav-content>
-      <app-pagination-table [requestFn$]="requestFn$"
+      <app-pagination-table [loadRequestFn$]="requestFn$"
                             paginationId="search-series"
                             [itemsPerPage]="10"
                             [columnDetails]="seriesColumnDetails"
