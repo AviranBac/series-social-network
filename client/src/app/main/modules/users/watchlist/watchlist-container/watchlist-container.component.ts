@@ -52,9 +52,9 @@ export class WatchlistContainerComponent implements OnInit {
       switchMap(() => this.username$.pipe(
         switchMap(username => this.watchlistService.loadWatchlistSeries(username).pipe(
           map((series: WatchlistTvSeries[]) => normalizeWatchlistSeries(series)),
-          shareReplay()
         ))
-      ))
+      )),
+      shareReplay()
     );
   }
 

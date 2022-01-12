@@ -25,6 +25,12 @@ export class UserFollowingComponent {
     ));
   }
 
+  getRemoveRequestFn(): Observable<(followedUser: User) => Observable<boolean>> {
+    return of((followedUser: User) => this.username$.pipe(
+      switchMap((followingUsername: string) => this.followService.updateFollow(followingUsername, followedUser.userName, true))
+    ));
+  }
+
   getUserDetailsRoute(user: User) {
     return extractUserRouterLink(user);
   }

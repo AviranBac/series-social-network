@@ -13,9 +13,11 @@ import {MatExpansionModule} from "@angular/material/expansion";
 import {MatListModule} from "@angular/material/list";
 import {WatchlistContainerComponent} from "./watchlist/watchlist-container/watchlist-container.component";
 import {WatchlistSeriesDetailsComponent} from "./watchlist/watchlist-series-details/watchlist-series-details.component";
-import { SearchUsersComponent } from './search-users/search-users.component';
+import {SearchUsersComponent} from './search-users/search-users.component';
 import {ReactiveFormsModule} from "@angular/forms";
 import {MatButtonModule} from "@angular/material/button";
+import {UpdateDetailsComponent} from './update-details/update-details.component';
+import {SweetAlert2Module} from "@sweetalert2/ngx-sweetalert2";
 
 @NgModule({
   declarations: [
@@ -24,7 +26,8 @@ import {MatButtonModule} from "@angular/material/button";
     UserDetailsComponent,
     WatchlistContainerComponent,
     WatchlistSeriesDetailsComponent,
-    SearchUsersComponent
+    SearchUsersComponent,
+    UpdateDetailsComponent
   ],
   imports: [
     CommonModule,
@@ -36,7 +39,8 @@ import {MatButtonModule} from "@angular/material/button";
     MatExpansionModule,
     MatListModule,
     ReactiveFormsModule,
-    MatButtonModule
+    MatButtonModule,
+    SweetAlert2Module
   ]
 })
 export class UsersModule { }

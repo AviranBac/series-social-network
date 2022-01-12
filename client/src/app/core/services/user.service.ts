@@ -32,4 +32,8 @@ export class UserService {
   loadUserDetails(username: string): Observable<User> {
     return this.http.get<User>(`${environment.apiGatewayUrl}/data/users/${username}`);
   }
+
+  updateUserDetails(user: User): Observable<User> {
+    return this.http.post<User>(`${environment.apiGatewayUrl}/user-actions/users`, user);
+  }
 }

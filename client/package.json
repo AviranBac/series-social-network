@@ -26,10 +26,12 @@
     "@ngrx/router-store": "^12.5.1",
     "@ngrx/store": "^12.5.1",
     "@ngrx/store-devtools": "^12.5.1",
+    "@sweetalert2/ngx-sweetalert2": "^10.0.0",
     "lodash": "^4.17.21",
     "ngx-pagination": "^5.1.1",
     "normalizr": "^3.6.1",
     "rxjs": "~7.4.0",
+    "sweetalert2": "^11.3.4",
     "tslib": "^2.3.0",
     "zone.js": "~0.11.4"
   },

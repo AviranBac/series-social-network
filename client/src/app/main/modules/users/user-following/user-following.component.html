@@ -3,6 +3,8 @@
                       [itemsPerPage]="itemsPerPage"
                       [columnDetails]="columnDetails"
                       [loadRequestFn$]="getRequestFn()"
+                      [removeRequestFn$]="getRemoveRequestFn()"
+                      [canRemoveEntity]="true"
                       [routerLinkExtractor]="getUserDetailsRoute">
   <span noDataBody>You have 0 following.</span>
 </app-pagination-table>
