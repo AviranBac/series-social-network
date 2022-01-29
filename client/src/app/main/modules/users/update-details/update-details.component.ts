@@ -5,7 +5,7 @@ import {UserService} from "../../../../core/services/user.service";
 import {filter, map, Observable, switchMap, tap} from "rxjs";
 import * as UserSelectors from "../../../root-store/user/user.selectors";
 import {User} from "../../../shared/models/user";
-import {FormBuilder, FormControl, FormGroup} from "@angular/forms";
+import {AbstractControl, FormBuilder, FormControl, FormGroup, Validators} from "@angular/forms";
 import * as UserActions from "../../../root-store/user/user.actions";
 
 @Component({
@@ -29,8 +29,16 @@ export class UpdateDetailsComponent {
         this.form = this.formBuilder.group({
           // TODO: Add validators
           // TODO: disable update button if we are in the initial state
-          firstName: new FormControl(user.firstName),
-          lastName: new FormControl(user.lastName)
+          firstName: new FormControl(user.firstName, [
+            Validators.required,
+            Validators.maxLength(32),
+            Validators.pattern("[A-Za-z א-ת\-]*")
+          ]),
+          lastName: new FormControl(user.lastName, [
+            Validators.required,
+            Validators.maxLength(32),
+            Validators.pattern("[A-Za-z א-ת\-]*")
+          ])
         })
       })
     );
@@ -47,5 +55,13 @@ export class UpdateDetailsComponent {
       this.isSwalVisible = true;
       this.userStore.dispatch(UserActions.upsertActiveUser({ user }));
     });
+  }
+
+  getFirstName(): AbstractControl {
+    return this.form.get('firstName')!;
+  }
+
+  getLastName(): AbstractControl {
+    return this.form.get('lastName')!;
   }
 }

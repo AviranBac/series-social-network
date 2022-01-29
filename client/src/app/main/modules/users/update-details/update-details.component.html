@@ -12,8 +12,35 @@
       <input type="text" formControlName="lastName" />
     </div>
 
+    <div *ngIf="getFirstName().invalid && (getFirstName().dirty || getFirstName().touched)" class="flex centralize-grid error-section">
+      <div *ngIf="getFirstName().errors?.['required']">
+        First name is required.
+      </div>
+      <div *ngIf="getFirstName().errors?.['maxlength']">
+        First name should be up to 32 characters long.
+      </div>
+      <div *ngIf="getFirstName().errors?.['pattern']">
+        First name has to contain English/Hebrew letters, spaces or hyphens.
+      </div>
+    </div>
+
+    <div *ngIf="getLastName().invalid && (getLastName().dirty || getLastName().touched)" class="flex centralize-grid error-section">
+      <div *ngIf="getLastName().errors?.['required']">
+        Last name is required.
+      </div>
+      <div *ngIf="getLastName().errors?.['maxlength']">
+        Last name should be up to 32 characters long.
+      </div>
+      <div *ngIf="getLastName().errors?.['pattern']">
+        Last name has to contain English/Hebrew letters, spaces or hyphens.
+      </div>
+    </div>
+
     <div class="submit-button-container centralize-text centralize-grid">
-      <button mat-raised-button (click)="updateUserDetails(userDetails.userName)">Update</button>
+      <button mat-raised-button
+              (click)="updateUserDetails(userDetails.userName)"
+              [disabled]="!!(getFirstName().errors || getLastName().errors)"
+      >Update</button>
     </div>
   </form>
 </div>

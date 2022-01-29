@@ -23,11 +23,12 @@ public interface TvSeriesRepository extends JpaRepository<PersistentTvSeries, St
                    "            FROM tv_seasons, tv_episodes, watchlist_records " +
                    "            WHERE watchlist_records.user_name IN ?1 AND " +
                    "                  watchlist_records.episode_id=tv_episodes.id AND " +
-                   "                  tv_episodes.season_id=tv_seasons.id) watchlist_series " +
+                   "                  tv_episodes.season_id=tv_seasons.id AND " +
+                   "                  tv_seasons.series_id NOT IN ?2) watchlist_series " +
                    "      GROUP BY watchlist_series.id) common_series, tv_series " +
                    "WHERE common_series.id=tv_series.id",
            nativeQuery = true)
-    Page<PersistentTvSeries> getCommonSeriesAmongUsers(Set<String> usernames, Pageable pageable);
+    Page<PersistentTvSeries> getCommonSeriesAmongUsers(Set<String> usernames, Set<String> watchedSeriesIds, Pageable pageable);
 
     @Query(value = "SELECT tv_series.* " +
                    "FROM (SELECT watchlist_series.id AS id, COUNT(*) AS count " +

@@ -1,5 +1,5 @@
 import {Component, Input, OnInit} from '@angular/core';
-import {BehaviorSubject, combineLatest, map, Observable, Subject, switchMap, tap} from "rxjs";
+import {BehaviorSubject, combineLatest, map, Observable, of, Subject, switchMap, tap} from "rxjs";
 import {Page} from "../../models/page";
 
 export interface ColumnDetails {
@@ -30,7 +30,7 @@ export class PaginationTableComponent<T> implements OnInit {
   @Input() paginationId: string;
   @Input() itemsPerPage: number;
   @Input() columnDetails: ColumnDetails[];
-  @Input() canRemoveEntity: boolean = false;
+  @Input() canRemoveEntity$: Observable<boolean> = of(false);
   @Input() loadRequestFn$: Observable<(page: number) => Observable<Page<T>>>;
   @Input() removeRequestFn$: Observable<(entity: T) => Observable<any>>;
   @Input() imageSrcExtractor?: (entity: T) => string;
@@ -41,7 +41,7 @@ export class PaginationTableComponent<T> implements OnInit {
   positionColumn = 'position';
   imageColumn = 'image';
   removeColumn = 'remove';
-  displayedColumns: string[] = [this.positionColumn];
+  displayedColumns$: Observable<string[]> = of([this.positionColumn]);
   currentDisplayedPage: number = 1;
   totalItems: number;
 
@@ -51,22 +51,37 @@ export class PaginationTableComponent<T> implements OnInit {
   constructor() { }
 
   ngOnInit(): void {
-    this.displayedColumns = this.imageSrcExtractor ? [ ...this.displayedColumns, this.imageColumn ] : this.displayedColumns;
-    this.displayedColumns = [
-      ...this.displayedColumns,
-      ...this.columnDetails.map(details => details.field)
-    ];
-    this.displayedColumns = this.canRemoveEntity ? [ ...this.displayedColumns, this.removeColumn ] : this.displayedColumns;
+    this.displayedColumns$ = of([this.positionColumn]).pipe(
+      map(columns => this.imageSrcExtractor ? [ ...columns, this.imageColumn ] : columns),
+      map(columns => ([
+        ...columns,
+        ...this.columnDetails.map(details => details.field)
+      ]))
+    );
 
-    this.handlePageRequests();
+    this.displayedColumns$ = combineLatest([this.displayedColumns$, this.canRemoveEntity$]).pipe(
+      map(([columns, canRemoveEntity]) => {
+        if (canRemoveEntity && columns.indexOf(this.removeColumn) == -1) {
+          return [ ...columns, this.removeColumn ];
+        }
+
+        if (!canRemoveEntity && columns.indexOf(this.removeColumn) != -1) {
+          return columns.splice(columns.indexOf(this.removeColumn), 1);
+        }
+
+        return columns;
+      })
+    );
+
+    this.dataSource$ = this.generateDataSource();
   }
 
   calculatePosition(currentIndex: number): number {
     return currentIndex + 1 + (this.currentDisplayedPage - 1) * Number(this.itemsPerPage);
   }
 
-  handlePageRequests(): void {
-    this.dataSource$ = combineLatest([this.loadRequestFn$, this.pageChange$, this.entityRemovedTrigger$]).pipe(
+  generateDataSource(): Observable<T[]> {
+    return combineLatest([this.loadRequestFn$, this.pageChange$, this.entityRemovedTrigger$]).pipe(
       tap(() => this.loading = true),
       switchMap(([requestFn, page]) => requestFn(page).pipe(
         tap((response: Page<T>) => {

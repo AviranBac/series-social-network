@@ -19,8 +19,8 @@ public class WatchlistTvSeasonDto extends TvSeasonDto {
     }
 
     public static WatchlistTvSeasonDto from(PersistentTvSeason persistentTvSeason,
-                                   List<TvEpisodeDto> tvEpisodeDtos,
-                                   WatchlistStatus watchlistStatus) {
+                                            List<TvEpisodeDto> tvEpisodeDtos,
+                                            WatchlistStatus watchlistStatus) {
         return new WatchlistTvSeasonDto(from(persistentTvSeason, tvEpisodeDtos))
                 .setWatchlistStatus(watchlistStatus);
     }

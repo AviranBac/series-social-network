@@ -14,8 +14,6 @@ import mahat.aviran.common.entities.persistence.PersistentTvEpisode;
 import mahat.aviran.common.entities.persistence.PersistentTvSeason;
 import mahat.aviran.common.entities.persistence.PersistentTvSeries;
 import mahat.aviran.common.repositories.TvEpisodeRepository;
-import mahat.aviran.common.repositories.TvSeasonRepository;
-import mahat.aviran.common.repositories.TvSeriesRepository;
 import org.springframework.stereotype.Component;
 
 import javax.transaction.Transactional;
@@ -30,9 +28,17 @@ import java.util.stream.Collectors;
 @Log4j2
 public class WatchlistBuilder {
 
-    private final TvSeriesRepository tvSeriesRepository;
-    private final TvSeasonRepository tvSeasonRepository;
     private final TvEpisodeRepository tvEpisodeRepository;
+
+    public Set<PersistentTvSeries> getUserWatchlistSeries(String username) {
+        return this.tvEpisodeRepository.getWatchlistEpisodes(username)
+                .stream()
+                .collect(Collectors.groupingBy(PersistentTvEpisode::getSeason, Collectors.toList()))
+                .keySet()
+                .stream()
+                .collect(Collectors.groupingBy(PersistentTvSeason::getTvSeries, Collectors.toList()))
+                .keySet();
+    }
 
     @Transactional
     public List<TvSeriesExtendedDto> getUserWatchlist(String username) {

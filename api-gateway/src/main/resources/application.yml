@@ -86,6 +86,3 @@ logging:
   level:
     root: INFO
     org.springframework.web: TRACE
-#    reactor.netty: DEBUG
-#    org.springframework.cloud.gateway: DEBUG
-#    org.springframework.security: TRACE
