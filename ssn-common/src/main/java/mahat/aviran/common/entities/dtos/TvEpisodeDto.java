@@ -10,8 +10,8 @@ public class TvEpisodeDto {
 
     private String id;
     private String name;
-    private String episodeNumber;
-    private String seasonNumber;
+    private int episodeNumber;
+    private int seasonNumber;
     private String airDate;
     private String overview;
     private String stillPath;
@@ -22,8 +22,8 @@ public class TvEpisodeDto {
         return new TvEpisodeDto()
                 .setId(persistentTvEpisode.getId())
                 .setName(persistentTvEpisode.getName())
-                .setEpisodeNumber(persistentTvEpisode.getEpisodeNumber())
-                .setSeasonNumber(persistentTvEpisode.getSeason().getSeasonNumber())
+                .setEpisodeNumber(Integer.parseInt(persistentTvEpisode.getEpisodeNumber()))
+                .setSeasonNumber(Integer.parseInt(persistentTvEpisode.getSeason().getSeasonNumber()))
                 .setAirDate(persistentTvEpisode.getAirDate())
                 .setOverview(persistentTvEpisode.getOverview())
                 .setStillPath(persistentTvEpisode.getStillPath())

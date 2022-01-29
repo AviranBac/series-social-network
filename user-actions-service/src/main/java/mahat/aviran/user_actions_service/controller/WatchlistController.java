@@ -7,13 +7,11 @@ import mahat.aviran.user_actions_service.utils.exceptions.WatchlistRecordExistsE
 import mahat.aviran.user_actions_service.utils.exceptions.WatchlistRecordNotFoundException;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
-import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 import javax.persistence.EntityNotFoundException;
-import javax.validation.Valid;
 import java.util.InputMismatchException;
 
 @Controller
@@ -21,16 +19,10 @@ import java.util.InputMismatchException;
 @RequiredArgsConstructor
 public class WatchlistController {
 
-    private final BindingResultHandler bindingResultHandler;
     private final WatchlistService watchlistService;
 
     @PostMapping()
-    public ResponseEntity<Object> updateWatchlist(@Valid @RequestBody WatchlistRecordDetails watchlistRecordDetails,
-                                                  BindingResult bindingResult) {
-        if (bindingResult.hasErrors()) {
-            return this.bindingResultHandler.generateErrorResponse(bindingResult);
-        }
-
+    public ResponseEntity<Object> updateWatchlist(@RequestBody WatchlistRecordDetails watchlistRecordDetails) {
         try {
             switch (watchlistRecordDetails.getAction()) {
                 case ADD:
@@ -48,8 +40,8 @@ public class WatchlistController {
             return ResponseEntity.badRequest().body("User " + watchlistRecordDetails.getUsername() + " doesn't have it in watchlist");
         } catch (EntityNotFoundException e) {
             return ResponseEntity.badRequest().body("User " + watchlistRecordDetails.getUsername() + " or " +
-                    watchlistRecordDetails.getEntityType() + " entity id " +
-                    watchlistRecordDetails.getEntityId() + " does not exist");
+                                                    watchlistRecordDetails.getEntityType() + " entity id " +
+                                                    watchlistRecordDetails.getEntityId() + " does not exist");
         }
     }
 }

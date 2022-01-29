@@ -1,0 +1,23 @@
+<h1 class="page-title">Search Users</h1>
+
+<form *ngIf="form" [formGroup]="form">
+  <section class="text-section centralize-text">
+    Search user name: <input type="text" formControlName="userName">
+  </section>
+
+  <section class="text-section centralize-text">
+    Search first name: <input type="text" formControlName="firstName">
+  </section>
+
+  <section class="text-section centralize-text">
+    Search last name: <input type="text" formControlName="lastName">
+  </section>
+</form>
+
+<app-pagination-table [loadRequestFn$]="requestFn$"
+                      paginationId="search-users"
+                      [itemsPerPage]="10"
+                      [columnDetails]="userColumnDetails"
+                      [routerLinkExtractor]="userRouterLinkExtractor">
+  <span noDataBody>There are no series matching your filters.</span>
+</app-pagination-table>

@@ -2,9 +2,10 @@ package mahat.aviran.data_api.controller;
 
 import lombok.RequiredArgsConstructor;
 import mahat.aviran.common.entities.SeriesStatus;
+import mahat.aviran.common.entities.dtos.TvSeriesDto;
+import mahat.aviran.common.entities.dtos.TvSeriesExtendedDto;
 import mahat.aviran.data_api.dtos.PageDto;
-import mahat.aviran.data_api.dtos.TvSeriesDto;
-import mahat.aviran.data_api.dtos.TvSeriesExtendedDto;
+import mahat.aviran.data_api.dtos.SeriesFilterOptionsDto;
 import mahat.aviran.data_api.services.TvSeriesService;
 import org.springframework.data.domain.Sort;
 import org.springframework.http.ResponseEntity;
@@ -30,6 +31,12 @@ public class TvSeriesController {
         return tvSeriesService.getSeriesByFilter(page, name, seriesStatus, genreId);
     }
 
+    @GetMapping("filters")
+    @ResponseBody
+    public SeriesFilterOptionsDto getSeriesFilterOptions() {
+        return tvSeriesService.getSeriesFilterOptions();
+    }
+
     @GetMapping("{seriesId}")
     public ResponseEntity<Object> getSeriesDetailsById(@PathVariable String seriesId) {
         Optional<TvSeriesExtendedDto> tvSeriesExtendedDto = tvSeriesService.getSeriesDetailsById(seriesId);
@@ -51,5 +58,17 @@ public class TvSeriesController {
     public PageDto<TvSeriesDto> getWatchedSeries(@RequestParam int page,
                                                  @RequestParam Sort.Direction sort) {
         return tvSeriesService.getMostWatchedSeries(page, sort);
+    }
+
+    @GetMapping("topRated")
+    @ResponseBody
+    public PageDto<TvSeriesDto> getTopRatedSeries(@RequestParam int page) {
+        return tvSeriesService.getTopRatedSeries(page);
+    }
+
+    @GetMapping("popular")
+    @ResponseBody
+    public PageDto<TvSeriesDto> getMostPopularSeries(@RequestParam int page) {
+        return tvSeriesService.getMostPopularSeries(page);
     }
 }

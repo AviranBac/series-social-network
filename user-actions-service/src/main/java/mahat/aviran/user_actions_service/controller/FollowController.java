@@ -21,15 +21,10 @@ import javax.validation.Valid;
 @RequiredArgsConstructor
 public class FollowController {
 
-    private final BindingResultHandler bindingResultHandler;
     private final FollowService followService;
 
     @PostMapping()
-    public ResponseEntity<Object> updateFollow(@Valid @RequestBody FollowDetails followDetails, BindingResult bindingResult) {
-        if (bindingResult.hasErrors()) {
-            return this.bindingResultHandler.generateErrorResponse(bindingResult);
-        }
-
+    public ResponseEntity<Object> updateFollow(@RequestBody FollowDetails followDetails) {
         try {
             switch (followDetails.getAction()) {
                 case ADD:

@@ -17,21 +17,27 @@ spring:
         - id: user_actions_service
           uri: http://localhost:8082
           predicates:
-            - Path=/users/**
+            - Path=/user-actions/**
+          filters:
+            - RewritePath=/user-actions(?<segment>/?.*), $\{segment}
         - id: data_api
           uri: http://localhost:8083
           predicates:
             - Path=/data/**
           filters:
             - RewritePath=/data(?<segment>/?.*), $\{segment}
+        - id: client
+          uri: http://localhost:4200
+          predicates:
+            - Path=/**
       default-filters:
         - TokenRelay=
         - RemoveRequestHeader=Cookie
         - name: RequestRateLimiter
           args:
             # These are configurations per second
-            redis-rate-limiter.replenishRate: 10
-            redis-rate-limiter.burstCapacity: 20
+            redis-rate-limiter.replenishRate: 30
+            redis-rate-limiter.burstCapacity: 60
             redis-rate-limiter.requestedTokens: 1
   redis:
     host: ${REDIS_HOST}
@@ -80,6 +86,3 @@ logging:
   level:
     root: INFO
     org.springframework.web: TRACE
-#    reactor.netty: DEBUG
-#    org.springframework.cloud.gateway: DEBUG
-#    org.springframework.security: TRACE

@@ -1,0 +1,35 @@
+<mat-accordion>
+  <mat-expansion-panel class="centralize-grid" *ngFor="let season of tvSeasons$ | async; trackBy: trackBySeasonId">
+    <mat-expansion-panel-header>
+      <app-watchlist-ribbon [entity]="season"
+                            [ngClass]="{ 'disable-click': disableRibbonClick }"
+                            [disableClick]="disableRibbonClick">
+      </app-watchlist-ribbon>
+      <mat-panel-title>
+        <img [src]="season.posterPath ? season.posterPath : '/assets/no-image-placeholder.svg'" [ngClass]="{'error-image': !season.posterPath}">
+        <div class="season-summary">
+          <h2 class="season-name">{{season.name}}</h2>
+          <span class="season-description">
+            Number of watched episodes: {{season.episodes.length}}
+          </span>
+          <p class="season-overview">
+            {{season.overview}}
+          </p>
+        </div>
+      </mat-panel-title>
+    </mat-expansion-panel-header>
+
+    <ng-template matExpansionPanelContent>
+      <mat-list>
+        <mat-list-item *ngFor="let episode of season.episodes; trackBy: trackByEpisodeId">
+          <app-watchlist-ribbon class="flex-stretched"
+                                [entity]="episode"
+                                [ngClass]="{ 'disable-click': disableRibbonClick }"
+                                [disableClick]="disableRibbonClick">
+          </app-watchlist-ribbon>
+          <span class="episode-name">Episode {{episode.episodeNumber}}: {{episode.name}}</span>
+        </mat-list-item>
+      </mat-list>
+    </ng-template>
+  </mat-expansion-panel>
+</mat-accordion>

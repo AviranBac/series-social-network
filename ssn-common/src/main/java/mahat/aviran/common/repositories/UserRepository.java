@@ -16,7 +16,9 @@ public interface UserRepository extends JpaRepository<PersistentUser, String>, J
                    "FROM (SELECT username_to, COUNT(*) AS count " +
                    "      FROM follows " +
                    "      GROUP BY username_to) followed_users, users " +
-                   "WHERE followed_users.username_to=users.user_name", nativeQuery = true)
+                   "WHERE followed_users.username_to=users.user_name",
+           countQuery = "SELECT COUNT(*) FROM users",
+           nativeQuery = true)
     Page<PersistentUser> findFollowedUsers(Pageable pageable);
 
     static Specification<PersistentUser> userNameStartsWith(String userName) {

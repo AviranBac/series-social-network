@@ -1,0 +1,36 @@
+<mat-accordion>
+  <mat-expansion-panel *ngFor="let series of watchlistSeries$ | async; trackBy: trackBySeriesId" >
+    <mat-expansion-panel-header>
+      <app-watchlist-ribbon [entity]="series"
+                            [ngClass]="{ 'disable-click': !(isCurrentUser$ | async) }"
+                            [disableClick]="!(isCurrentUser$ | async)">
+      </app-watchlist-ribbon>
+      <mat-panel-title>
+        <img [src]="series.posterPath ? series.posterPath : '/assets/no-image-placeholder.svg'" [ngClass]="{'error-image': !series.posterPath}">
+        <div class="series-summary">
+          <a [routerLink]="['/series', series.id]"><h2 class="series-name">{{series.name}}</h2></a>
+          <span class="series-description">
+            Number of seasons: {{series.numberOfSeasons}} |
+            Number of episodes: {{series.numberOfEpisodes}} |
+            Status: {{getStatusValue(series.status)}} |
+            {{series.genres.join(', ')}}
+          </span>
+          <p class="series-overview">
+            {{series.overview}}
+          </p>
+        </div>
+      </mat-panel-title>
+      <mat-panel-description>
+      </mat-panel-description>
+    </mat-expansion-panel-header>
+
+    <ng-template matExpansionPanelContent>
+      <app-watchlist-series-details [seasonsProvider]="getSeasonsProvider(series)">
+      </app-watchlist-series-details>
+    </ng-template>
+  </mat-expansion-panel>
+</mat-accordion>
+
+<div class="empty-message centralize-text" *ngIf="(watchlistSeries$ | async)?.length === 0">
+  There are 0 series in the watchlist.
+</div>

@@ -1,0 +1,77 @@
+<div class="page-container centralize-grid" *ngIf="tvSeries$ | async as series">
+  <div class="title-container centralize-grid">
+    <h1 class="page-title">{{series.name}}</h1>
+  </div>
+
+  <div class="details-container centralize-grid">
+    <div class="image-container centralize-grid">
+      <img [src]="series.posterPath ? series.posterPath : '/assets/no-image-placeholder.svg'" [ngClass]="{'error-image': !series.posterPath}">
+    </div>
+
+    <div class="details centralize-grid">
+      <div class="flex-column">
+        <div class="flex full-width overview">
+          <span>{{series.overview}}</span>
+        </div>
+        <div class="flex full-width">
+          <mat-icon>calendar_today</mat-icon>
+          <span class="flex-stretched">
+            First air date:&nbsp;
+            <span class="content-value">{{series.firstAirDate}}</span>
+          </span>
+        </div>
+        <div class="flex full-width">
+          <mat-icon>list</mat-icon>
+          <span class="flex-stretched">
+            Genres:&nbsp;
+            <span class="content-value">{{series.genres.join(', ')}}</span>
+          </span>
+        </div>
+        <div class="flex full-width">
+          <mat-icon>movie</mat-icon>
+          <span class="flex-stretched">
+            Status:&nbsp;
+            <span class="content-value">{{getStatusValue(series.status)}}</span>
+          </span>
+        </div>
+        <div class="flex two-elements">
+          <span class="flex-stretched">
+            <mat-icon>tv</mat-icon>
+            Number of seasons:&nbsp;
+            <span class="content-value">{{series.numberOfSeasons}}</span>
+          </span>
+          <span class="flex-stretched">
+            <mat-icon>tv</mat-icon>
+            Number of episodes:&nbsp;
+            <span class="content-value">{{series.numberOfEpisodes}}</span>
+          </span>
+        </div>
+        <div class="flex two-elements">
+          <span class="flex-stretched">
+            <mat-icon>stars</mat-icon>
+            Popularity:&nbsp;
+            <span class="content-value">{{series.popularity}}</span>
+          </span>
+          <span class="flex-stretched">
+            <mat-icon>stars</mat-icon>
+            Rating:&nbsp;
+            <span class="content-value">{{series.voteAverage}} ({{series.voteCount}} votes)</span>
+          </span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="seasons-form flex">
+    <mat-form-field appearance="fill">
+      <mat-label>Choose season</mat-label>
+      <mat-select (selectionChange)="selectedTvSeasonTrigger$.next($event.value)">
+        <mat-option *ngFor="let season of series.seasons" [value]="season.id">{{season.name}}</mat-option>
+      </mat-select>
+    </mat-form-field>
+  </div>
+
+  <div class="seasons-display" *ngIf="selectedTvSeason$ | async as season">
+    <app-season-details [season]="season"></app-season-details>
+  </div>
+</div>

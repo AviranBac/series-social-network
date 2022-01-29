@@ -12,21 +12,10 @@ import org.springframework.stereotype.Repository;
 
 import javax.persistence.criteria.CriteriaBuilder;
 import java.util.Collection;
-import java.util.List;
 import java.util.Set;
 
 @Repository
 public interface TvSeriesRepository extends JpaRepository<PersistentTvSeries, String>, JpaSpecificationExecutor<PersistentTvSeries> {
-
-    @Query(value = "SELECT tv_series.* " +
-                   "FROM (SELECT DISTINCT tv_seasons.series_id AS series_id" +
-                   "      FROM tv_seasons, tv_episodes, watchlist_records " +
-                   "      WHERE watchlist_records.user_name IN ?1 AND " +
-                   "            watchlist_records.episode_id=tv_episodes.id AND " +
-                   "            tv_episodes.season_id=tv_seasons.id) watchlist_series, tv_series " +
-                   "WHERE tv_series.id = watchlist_series.series_id",
-           nativeQuery = true)
-    List<PersistentTvSeries> getWatchlistTvSeries(Set<String> usernames);
 
     @Query(value = "SELECT tv_series.* " +
                    "FROM (SELECT watchlist_series.id AS id, COUNT(*) AS count " +
@@ -34,11 +23,12 @@ public interface TvSeriesRepository extends JpaRepository<PersistentTvSeries, St
                    "            FROM tv_seasons, tv_episodes, watchlist_records " +
                    "            WHERE watchlist_records.user_name IN ?1 AND " +
                    "                  watchlist_records.episode_id=tv_episodes.id AND " +
-                   "                  tv_episodes.season_id=tv_seasons.id) watchlist_series " +
+                   "                  tv_episodes.season_id=tv_seasons.id AND " +
+                   "                  tv_seasons.series_id NOT IN ?2) watchlist_series " +
                    "      GROUP BY watchlist_series.id) common_series, tv_series " +
                    "WHERE common_series.id=tv_series.id",
            nativeQuery = true)
-    Page<PersistentTvSeries> getCommonSeriesAmongUsers(Set<String> usernames, Pageable pageable);
+    Page<PersistentTvSeries> getCommonSeriesAmongUsers(Set<String> usernames, Set<String> watchedSeriesIds, Pageable pageable);
 
     @Query(value = "SELECT tv_series.* " +
                    "FROM (SELECT watchlist_series.id AS id, COUNT(*) AS count " +
@@ -50,6 +40,10 @@ public interface TvSeriesRepository extends JpaRepository<PersistentTvSeries, St
                    "WHERE common_series.id=tv_series.id",
             nativeQuery = true)
     Page<PersistentTvSeries> getWatchedSeries(Pageable pageable);
+
+    Page<PersistentTvSeries> getAllByOrderByVoteAverageDesc(Pageable pageable);
+
+    Page<PersistentTvSeries> getAllByOrderByPopularityDesc(Pageable pageable);
 
     static Specification<PersistentTvSeries> nameStartsWith(String name) {
         return (tvSeries, criteriaQuery, criteriaBuilder) -> criteriaBuilder.like(criteriaBuilder.lower(tvSeries.get("name")), name.toLowerCase() + "%");
@@ -64,6 +58,9 @@ public interface TvSeriesRepository extends JpaRepository<PersistentTvSeries, St
     }
 
     static Specification<PersistentTvSeries> genreIdIn(Collection<Integer> genreIdCriteria) {
-        return (tvSeries, criteriaQuery, criteriaBuilder) ->  tvSeries.join("genres").in(genreIdCriteria);
+        return (tvSeries, criteriaQuery, criteriaBuilder) -> {
+            criteriaQuery.distinct(true);
+            return tvSeries.join("genres").in(genreIdCriteria);
+        };
     }
 }

@@ -25,7 +25,7 @@ public class UserService {
 
     private final UserRepository userRepository;
     private final FollowRepository followRepository;
-    private final int PAGE_SIZE = 20;
+    private final int PAGE_SIZE = 10;
 
     public PageDto<UserDto> getUsersByFilter(int page, String userName, String firstName, String lastName) {
         Specification<PersistentUser> specification = userNameStartsWith(userName)
@@ -68,6 +68,14 @@ public class UserService {
                 .map(FollowRepository.Following::getUsernameTo)
                 .map(UserDto::from))
                 .map(PageDto::from);
+    }
+
+    public Optional<Boolean> isFollowing(String followingUsername, String followedUsername) {
+        if (!this.userRepository.existsById(followingUsername) || !this.userRepository.existsById(followedUsername)) {
+            return Optional.empty();
+        }
+
+        return Optional.of(Optional.ofNullable(this.followRepository.findFollow(followingUsername, followedUsername)).isPresent());
     }
 
     public PageDto<UserDto> getFollowedUsers(int page, Sort.Direction direction) {

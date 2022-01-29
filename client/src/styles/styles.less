@@ -1,0 +1,45 @@
+@import "reset";
+
+html, body { height: 100%; }
+body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
+
+.page-title {
+  text-align: center;
+  text-decoration: underline;
+  margin-top: 1rem;
+  margin-bottom: 1rem;
+  font-size: 2rem;
+  color: @primary-theme;
+}
+
+.centralize-grid {
+  margin: auto;
+}
+
+.centralize-text {
+  text-align: center;
+}
+
+.flex-column {
+  display: flex;
+  flex-direction: column;
+}
+
+.flex {
+  display: flex;
+
+  .flex-stretched {
+    flex: 1;
+  }
+}
+
+.full-width {
+  width: 100%;
+}
+
+.error-image {
+  width: 12rem;
+  height: 12rem;
+}
+
+@primary-theme: #3f51b5;

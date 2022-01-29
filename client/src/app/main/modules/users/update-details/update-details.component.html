@@ -1,0 +1,52 @@
+<div *ngIf="userDetails$ | async as userDetails">
+  <h1 class="page-title"> Update Details: {{userDetails.userName}}</h1>
+
+  <form *ngIf="form" [formGroup]="form" class="flex-column">
+    <div class="flex centralize-grid">
+      <span>First name:&nbsp;</span>
+      <input type="text" formControlName="firstName" />
+    </div>
+
+    <div class="flex centralize-grid">
+      <span>Last name:&nbsp;</span>
+      <input type="text" formControlName="lastName" />
+    </div>
+
+    <div *ngIf="getFirstName().invalid && (getFirstName().dirty || getFirstName().touched)" class="flex centralize-grid error-section">
+      <div *ngIf="getFirstName().errors?.['required']">
+        First name is required.
+      </div>
+      <div *ngIf="getFirstName().errors?.['maxlength']">
+        First name should be up to 32 characters long.
+      </div>
+      <div *ngIf="getFirstName().errors?.['pattern']">
+        First name has to contain English/Hebrew letters, spaces or hyphens.
+      </div>
+    </div>
+
+    <div *ngIf="getLastName().invalid && (getLastName().dirty || getLastName().touched)" class="flex centralize-grid error-section">
+      <div *ngIf="getLastName().errors?.['required']">
+        Last name is required.
+      </div>
+      <div *ngIf="getLastName().errors?.['maxlength']">
+        Last name should be up to 32 characters long.
+      </div>
+      <div *ngIf="getLastName().errors?.['pattern']">
+        Last name has to contain English/Hebrew letters, spaces or hyphens.
+      </div>
+    </div>
+
+    <div class="submit-button-container centralize-text centralize-grid">
+      <button mat-raised-button
+              (click)="updateUserDetails(userDetails.userName)"
+              [disabled]="!!(getFirstName().errors || getLastName().errors)"
+      >Update</button>
+    </div>
+  </form>
+</div>
+
+<swal
+  text="User details have been updated successfully"
+  [swalVisible]="isSwalVisible"
+  (didClose)="isSwalVisible = false">
+</swal>
