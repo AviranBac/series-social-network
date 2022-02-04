@@ -6,7 +6,6 @@ import lombok.extern.log4j.Log4j2;
 import mahat.aviran.common.entities.dtos.TvEpisodeDto;
 import mahat.aviran.common.entities.dtos.TvSeasonDto;
 import mahat.aviran.common.entities.dtos.TvSeriesDto;
-import mahat.aviran.common.entities.dtos.TvSeriesExtendedDto;
 import mahat.aviran.common.entities.dtos.watchlist.WatchlistStatus;
 import mahat.aviran.common.entities.dtos.watchlist.WatchlistTvSeasonDto;
 import mahat.aviran.common.entities.dtos.watchlist.WatchlistTvSeriesDto;
@@ -21,6 +20,7 @@ import java.util.Comparator;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.stream.Collectors;
 
 @Component
@@ -41,7 +41,7 @@ public class WatchlistBuilder {
     }
 
     @Transactional
-    public List<TvSeriesExtendedDto> getUserWatchlist(String username) {
+    public List<WatchlistTvSeriesDto> getUserWatchlist(String username) {
         Map<PersistentTvSeason, List<PersistentTvEpisode>> watchlistSeasonsAndEpisodes = this.tvEpisodeRepository.getWatchlistEpisodes(username)
                 .stream()
                 .collect(Collectors.groupingBy(PersistentTvEpisode::getSeason, Collectors.toList()));
@@ -62,7 +62,7 @@ public class WatchlistBuilder {
 
         return watchlistSeriesAndSeasons.keySet()
                 .stream()
-                .map(persistentTvSeries -> this.convertToExtendedDto(
+                .map(persistentTvSeries -> this.convertToWatchlistDto(
                         persistentTvSeries,
                         watchlistSeriesAndSeasons,
                         totalSeriesAndSeasons,
@@ -73,12 +73,13 @@ public class WatchlistBuilder {
                 .collect(Collectors.toList());
     }
 
-    private TvSeriesExtendedDto convertToExtendedDto(PersistentTvSeries persistentTvSeries,
-                                                     Map<PersistentTvSeries, List<PersistentTvSeason>> watchlistSeriesAndSeasons,
-                                                     Map<PersistentTvSeries, List<PersistentTvSeason>> totalSeriesAndSeasons,
-                                                     Map<PersistentTvSeason, List<PersistentTvEpisode>> watchlistSeasonsAndEpisodes,
-                                                     Map<PersistentTvSeason, List<PersistentTvEpisode>> totalSeasonsAndEpisodes) {
-        List<TvSeasonDto> tvSeasonDtos =  watchlistSeriesAndSeasons.get(persistentTvSeries)
+    private WatchlistTvSeriesDto convertToWatchlistDto(PersistentTvSeries persistentTvSeries,
+                                                       Map<PersistentTvSeries, List<PersistentTvSeason>> watchlistSeriesAndSeasons,
+                                                       Map<PersistentTvSeries, List<PersistentTvSeason>> totalSeriesAndSeasons,
+                                                       Map<PersistentTvSeason, List<PersistentTvEpisode>> watchlistSeasonsAndEpisodes,
+                                                       Map<PersistentTvSeason, List<PersistentTvEpisode>> totalSeasonsAndEpisodes) {
+        AtomicBoolean hasWatchedAnySeasonPartially = new AtomicBoolean(false);
+        List<WatchlistTvSeasonDto> watchlistTvSeasonDtos =  watchlistSeriesAndSeasons.get(persistentTvSeries)
                 .stream()
                 .map(persistentTvSeason -> {
                     List<TvEpisodeDto> tvEpisodeDtos = watchlistSeasonsAndEpisodes.get(persistentTvSeason)
@@ -90,14 +91,20 @@ public class WatchlistBuilder {
                             WatchlistStatus.PARTIAL :
                             WatchlistStatus.COMPLETE;
 
+                    if (watchlistStatus == WatchlistStatus.PARTIAL) {
+                        hasWatchedAnySeasonPartially.set(true);
+                    }
+
                     return WatchlistTvSeasonDto.from(persistentTvSeason, tvEpisodeDtos, watchlistStatus);
                 })
                 .sorted(Comparator.comparing(TvSeasonDto::getSeasonNumber))
                 .collect(Collectors.toList());
 
-        WatchlistStatus watchlistStatus = tvSeasonDtos.size() < totalSeriesAndSeasons.get(persistentTvSeries).size() ?
+        boolean hasNotWatchedAllSeasons = watchlistTvSeasonDtos.size() < totalSeriesAndSeasons.get(persistentTvSeries).size();
+
+        WatchlistStatus watchlistStatus = hasNotWatchedAllSeasons || hasWatchedAnySeasonPartially.get() ?
                 WatchlistStatus.PARTIAL :
                 WatchlistStatus.COMPLETE;
-        return WatchlistTvSeriesDto.from(persistentTvSeries, tvSeasonDtos, watchlistStatus);
+        return WatchlistTvSeriesDto.from(persistentTvSeries, watchlistTvSeasonDtos, watchlistStatus);
     }
 }

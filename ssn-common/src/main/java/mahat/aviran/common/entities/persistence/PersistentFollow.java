@@ -16,10 +16,10 @@ public class PersistentFollow {
     private long id;
 
     @ManyToOne
-    @JoinColumn(name = "username_from", foreignKey = @ForeignKey(name = "fk_from"), nullable = false)
+    @JoinColumn(name = "username_from", foreignKey = @ForeignKey(name = "fk_from", foreignKeyDefinition = "FOREIGN KEY (username_from) REFERENCES users(user_name) ON DELETE CASCADE"), nullable = false)
     private PersistentUser usernameFrom;
 
     @ManyToOne
-    @JoinColumn(name = "username_to", foreignKey = @ForeignKey(name = "fk_to"), nullable = false)
+    @JoinColumn(name = "username_to", foreignKey = @ForeignKey(name = "fk_to", foreignKeyDefinition = "FOREIGN KEY (username_to) REFERENCES users(user_name) ON DELETE CASCADE"), nullable = false)
     private PersistentUser usernameTo;
 }

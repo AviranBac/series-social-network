@@ -1,5 +1,6 @@
 package mahat.aviran.common.entities.dtos;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import lombok.*;
 import lombok.experimental.Accessors;
 import mahat.aviran.common.entities.persistence.PersistentTvSeason;
@@ -10,6 +11,7 @@ import java.util.stream.Collectors;
 
 @Accessors(chain = true)
 @Getter @Setter @ToString @EqualsAndHashCode @AllArgsConstructor @NoArgsConstructor
+@JsonIgnoreProperties(ignoreUnknown = true)
 public class TvSeasonDto {
 
     private String id;

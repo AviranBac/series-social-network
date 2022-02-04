@@ -10,7 +10,7 @@ import java.util.Set;
 @Entity
 @Table(name = "users")
 @Accessors(chain = true)
-@Getter @Setter @ToString @EqualsAndHashCode @AllArgsConstructor @NoArgsConstructor
+@Getter @Setter @ToString @EqualsAndHashCode(exclude = "watchlistRecords") @AllArgsConstructor @NoArgsConstructor
 public class PersistentUser {
 
     @Id

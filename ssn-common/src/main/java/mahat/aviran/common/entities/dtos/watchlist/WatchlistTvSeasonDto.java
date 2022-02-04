@@ -1,5 +1,6 @@
 package mahat.aviran.common.entities.dtos.watchlist;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import lombok.*;
 import lombok.experimental.Accessors;
 import mahat.aviran.common.entities.dtos.TvEpisodeDto;
@@ -10,6 +11,7 @@ import java.util.List;
 
 @Accessors(chain = true)
 @Getter @Setter @ToString(callSuper = true) @EqualsAndHashCode(callSuper = true) @AllArgsConstructor @NoArgsConstructor
+@JsonIgnoreProperties(ignoreUnknown = true)
 public class WatchlistTvSeasonDto extends TvSeasonDto {
 
     private WatchlistStatus watchlistStatus;

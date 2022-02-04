@@ -17,11 +17,6 @@ spring:
       minimum-idle: 5
       maximum-pool-size: 10
       pool-name: HikariCP-Aviran-Data-API
-  security:
-    oauth2:
-      resourceserver:
-        jwt:
-          jwk-set-uri: https://dev-52403713.okta.com/oauth2/seriesSocialNetwork/v1/keys
 
 server:
   port: 8083

@@ -33,8 +33,8 @@ public class PersistentTvSeries {
     @JoinTable(name = "series_to_genre",
                joinColumns = @JoinColumn(name = "series_id"),
                inverseJoinColumns = @JoinColumn(name = "genre_id"),
-               foreignKey = @ForeignKey(name ="fk_series_id"),
-               inverseForeignKey = @ForeignKey(name = "fk_genre_id"))
+               foreignKey = @ForeignKey(name ="fk_series_id", foreignKeyDefinition = "FOREIGN KEY (series_id) REFERENCES tv_series(id) ON DELETE CASCADE"),
+               inverseForeignKey = @ForeignKey(name = "fk_genre_id", foreignKeyDefinition = "FOREIGN KEY (genre_id) REFERENCES genres(id) ON DELETE CASCADE"))
     private Set<PersistentGenre> genres = new HashSet<>();
 
     @OneToMany(mappedBy = "tvSeries", cascade = CascadeType.ALL)

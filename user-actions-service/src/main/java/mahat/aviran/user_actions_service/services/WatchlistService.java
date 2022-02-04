@@ -3,7 +3,7 @@ package mahat.aviran.user_actions_service.services;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
-import mahat.aviran.common.entities.dtos.TvSeriesExtendedDto;
+import mahat.aviran.common.entities.dtos.watchlist.WatchlistTvSeriesDto;
 import mahat.aviran.common.entities.persistence.PersistentTvEpisode;
 import mahat.aviran.common.entities.persistence.PersistentUser;
 import mahat.aviran.common.helpers.WatchlistBuilder;
@@ -33,7 +33,7 @@ public class WatchlistService {
     private final WatchlistBuilder watchlistBuilder;
 
     @Transactional
-    public List<TvSeriesExtendedDto> addToWatchlist(String username, WatchlistRecordDetails.EntityType entityType, String entityId) {
+    public List<WatchlistTvSeriesDto> addToWatchlist(String username, WatchlistRecordDetails.EntityType entityType, String entityId) {
         this.validateInput(username, entityType, entityId, false);
         List<PersistentTvEpisode> episodesToAdd = this.getTvEpisodesByEntity(entityType, entityId);
 
@@ -45,7 +45,7 @@ public class WatchlistService {
     }
 
     @Transactional
-    public List<TvSeriesExtendedDto> removeFromWatchlist(String username, WatchlistRecordDetails.EntityType entityType, String entityId) {
+    public List<WatchlistTvSeriesDto> removeFromWatchlist(String username, WatchlistRecordDetails.EntityType entityType, String entityId) {
         this.validateInput(username, entityType, entityId, true);
         List<PersistentTvEpisode> episodesToRemove = this.getTvEpisodesByEntity(entityType, entityId);
 
