@@ -1,4 +1,4 @@
-import {Component, Input, OnInit} from '@angular/core';
+import {Component, Input, OnChanges} from '@angular/core';
 import {WatchlistStatus} from "../../models/watchlist-status";
 import {Store} from "@ngrx/store";
 import {Observable} from "rxjs";
@@ -16,7 +16,7 @@ import {EntityType, WatchlistService} from "../../../../core/services/watchlist.
   templateUrl: './watchlist-ribbon.component.html',
   styleUrls: ['./watchlist-ribbon.component.less']
 })
-export class WatchlistRibbonComponent implements OnInit {
+export class WatchlistRibbonComponent implements OnChanges {
   @Input() entity: TvSeries | TvSeason | TvEpisode;
   @Input() disableClick: boolean = false;
 
@@ -26,7 +26,7 @@ export class WatchlistRibbonComponent implements OnInit {
   constructor(private watchlistStore: Store<WatchlistTvSeriesState.State>,
               private watchlistService: WatchlistService) {}
 
-  ngOnInit(): void {
+  ngOnChanges(): void {
     let watchlistStatusSelector;
 
     if (isSeries(this.entity)) {

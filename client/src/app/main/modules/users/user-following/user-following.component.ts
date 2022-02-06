@@ -1,5 +1,5 @@
 import {Component, Input} from '@angular/core';
-import {filter, map, Observable, of, switchMap, tap, withLatestFrom} from 'rxjs';
+import {filter, map, Observable, of, switchMap, withLatestFrom} from 'rxjs';
 import {FollowService} from "../../../../core/services/follow.service";
 import {extractUserRouterLink, User} from "../../../shared/models/user";
 import {Page} from "../../../shared/models/page";
@@ -45,7 +45,6 @@ export class UserFollowingComponent {
         filter(username => !!username),
         map(username => username as string),
       )),
-      tap(console.log),
       map(([username, loggedInUsername]) => username === loggedInUsername)
     );
   }

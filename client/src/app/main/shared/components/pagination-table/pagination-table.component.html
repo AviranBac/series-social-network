@@ -19,7 +19,7 @@
 
     <ng-container *ngFor="let columnDetail of columnDetails" [matColumnDef]="columnDetail.field">
       <th mat-header-cell *matHeaderCellDef> {{columnDetail.label}} </th>
-      <td mat-cell *matCellDef="let entity"> {{entity[columnDetail.field]}} </td>
+      <td mat-cell *matCellDef="let entity"> {{columnDetail.displayFn ? columnDetail.displayFn(entity[columnDetail.field]) : entity[columnDetail.field]}} </td>
     </ng-container>
 
     <ng-container *ngIf="canRemoveEntity$ | async" [matColumnDef]="removeColumn">

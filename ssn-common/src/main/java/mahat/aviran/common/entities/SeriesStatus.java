@@ -9,7 +9,17 @@ import java.util.Arrays;
 public enum SeriesStatus {
     CANCELED("Canceled"),
     ENDED("Ended"),
-    RETURNING_SERIES("On Air");
+    RETURNING_SERIES("Returning Series");
 
+    // The actual field value from TMDB
     private final String rawValue;
+
+    // Used to retreive SeriesStatus from TMDB request
+    @JsonCreator
+    public static SeriesStatus forValue(String value) {
+        return Arrays.stream(SeriesStatus.values())
+                .filter(enumValue -> enumValue.rawValue.equalsIgnoreCase(value))
+                .findAny()
+                .orElse(null);
+    }
 }

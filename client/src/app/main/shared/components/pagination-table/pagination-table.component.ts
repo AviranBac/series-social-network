@@ -1,10 +1,12 @@
 import {Component, Input, OnInit} from '@angular/core';
 import {BehaviorSubject, combineLatest, map, Observable, of, Subject, switchMap, tap} from "rxjs";
 import {Page} from "../../models/page";
+import {getStatusValue} from "../../models/series-status";
 
 export interface ColumnDetails {
   field: string
-  label: string
+  label: string,
+  displayFn?: (rawValue: string) => string
 }
 
 export const userColumnDetails: ColumnDetails[] = [
@@ -17,7 +19,7 @@ export const seriesColumnDetails: ColumnDetails[] = [
   { field: 'name', label: 'Name' },
   { field: 'numberOfEpisodes', label: 'Number of Episodes' },
   { field: 'numberOfSeasons', label: 'Number of Seasons' },
-  { field: 'status', label: 'Series Status' },
+  { field: 'status', label: 'Series Status', displayFn: rawValue => getStatusValue(rawValue) },
   { field: 'genres', label: 'Genres' }
 ];
 
